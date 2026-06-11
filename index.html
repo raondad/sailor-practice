@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>나의 어린 선원에게 · 필사 연습</title>
+<title>To My Little Sailor · Reading Journal</title>
 <style>
   :root {
     --navy: #1a3a5c;
@@ -14,612 +14,759 @@
     --correct: #2e7d52;
     --wrong: #c0392b;
     --bg: #eef4fb;
+    --card-bg: #ffffff;
+    --border: #dde8f4;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
-    font-family: 'Segoe UI', 'Apple SD Gothic Neo', sans-serif;
+    font-family: 'Apple SD Gothic Neo', 'Segoe UI', sans-serif;
     background: var(--bg);
     min-height: 100vh;
     color: var(--navy);
+    padding-bottom: 80px;
   }
 
   /* ── Header ── */
   header {
     background: linear-gradient(135deg, var(--navy) 0%, var(--ocean) 100%);
     color: white;
-    padding: 16px 20px 12px;
+    padding: 14px 18px 12px;
     text-align: center;
     position: sticky; top: 0; z-index: 100;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.3);
   }
-  header h1 { font-size: 1.05rem; font-weight: 700; letter-spacing: 0.3px; }
-  header p  { font-size: 0.78rem; opacity: 0.85; margin-top: 2px; }
+  header h1 { font-size: 1.0rem; font-weight: 700; letter-spacing: 0.3px; }
+  header p  { font-size: 0.75rem; opacity: 0.8; margin-top: 3px; }
 
   /* ── Chapter selector ── */
   #chapterSelect {
-    background: white;
-    padding: 14px 16px;
-    border-bottom: 1px solid #dde8f4;
+    background: white; padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
   }
-  #chapterSelect label { font-size: 0.8rem; color: var(--ocean); font-weight: 600; display: block; margin-bottom: 6px; }
+  #chapterSelect label {
+    font-size: 0.78rem; color: var(--ocean);
+    font-weight: 600; display: block; margin-bottom: 6px;
+  }
   #chapterSelect select {
-    width: 100%; padding: 9px 12px; border: 2px solid var(--wave);
-    border-radius: 8px; font-size: 0.9rem; color: var(--navy);
-    background: white; appearance: none;
+    width: 100%; padding: 9px 36px 9px 12px;
+    border: 2px solid var(--wave); border-radius: 8px;
+    font-size: 0.88rem; color: var(--navy); background: white;
+    appearance: none;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%232e6da4' stroke-width='2' fill='none'/%3E%3C/svg%3E");
     background-repeat: no-repeat; background-position: right 12px center;
   }
 
   /* ── Language toggle ── */
   #langToggle {
-    display: flex; gap: 8px; padding: 12px 16px;
-    background: white; border-bottom: 1px solid #dde8f4;
+    display: flex; gap: 8px; padding: 10px 16px;
+    background: white; border-bottom: 1px solid var(--border);
   }
   .lang-btn {
-    flex: 1; padding: 8px; border-radius: 20px; border: 2px solid var(--wave);
-    font-size: 0.85rem; font-weight: 600; cursor: pointer;
+    flex: 1; padding: 8px; border-radius: 20px;
+    border: 2px solid var(--wave); font-size: 0.85rem;
+    font-weight: 600; cursor: pointer;
     background: white; color: var(--ocean); transition: all 0.2s;
   }
   .lang-btn.active { background: var(--ocean); color: white; border-color: var(--ocean); }
 
-  /* ── Sentences ── */
-  #sentenceArea { padding: 16px; }
-  .sentence-card {
-    background: white; border-radius: 12px; padding: 16px;
-    margin-bottom: 14px; box-shadow: 0 2px 8px rgba(26,58,92,0.08);
-    border-left: 4px solid var(--wave);
+  /* ── Chapter title ── */
+  #chapterTitle {
+    padding: 14px 16px 2px;
+    font-size: 0.92rem; font-weight: 700; color: var(--ocean);
   }
+
+  /* ── Two-column sentence area ── */
+  #twoColHeader {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 8px; padding: 8px 16px 4px;
+  }
+  .col-label {
+    font-size: 0.72rem; font-weight: 700; text-align: center;
+    color: white; padding: 5px 0; border-radius: 6px;
+  }
+  .col-label.en { background: var(--ocean); }
+  .col-label.ko { background: #5b7ba8; }
+
+  #sentenceArea { padding: 0 16px 8px; }
+
+  .sentence-row {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 8px; margin-bottom: 10px;
+  }
+  .sentence-card {
+    background: white; border-radius: 10px; padding: 12px;
+    box-shadow: 0 2px 6px rgba(26,58,92,0.07);
+  }
+  .sentence-card.en-card { border-left: 4px solid var(--ocean); }
+  .sentence-card.ko-card { border-left: 4px solid #8aaed4; }
   .sentence-num {
-    font-size: 0.72rem; color: var(--wave); font-weight: 700;
-    text-transform: uppercase; margin-bottom: 6px;
+    font-size: 0.65rem; color: var(--wave);
+    font-weight: 700; margin-bottom: 5px;
   }
   .sentence-text {
-    font-size: 1.05rem; color: var(--navy); font-weight: 500;
-    line-height: 1.6; margin-bottom: 10px;
+    font-size: 0.82rem; color: var(--navy);
+    font-weight: 500; line-height: 1.5; margin-bottom: 8px;
   }
-  .input-row { position: relative; }
   .sentence-input {
-    width: 100%; padding: 10px 12px; border: 2px solid #c8ddf0;
-    border-radius: 8px; font-size: 0.95rem; color: var(--navy);
-    transition: border-color 0.2s; outline: none; background: #f8fbff;
+    width: 100%; padding: 7px 10px;
+    border: 2px solid #c8ddf0; border-radius: 7px;
+    font-size: 0.8rem; color: var(--navy);
+    background: #f8fbff; outline: none; transition: border-color 0.2s;
   }
   .sentence-input:focus { border-color: var(--ocean); background: white; }
   .sentence-input.correct { border-color: var(--correct); background: #f0fff6; }
   .sentence-input.wrong   { border-color: var(--wrong);   background: #fff5f5; }
   .feedback {
-    font-size: 0.78rem; margin-top: 5px; font-weight: 600; min-height: 18px;
+    font-size: 0.7rem; margin-top: 4px; font-weight: 600; min-height: 16px;
   }
   .feedback.correct { color: var(--correct); }
   .feedback.wrong   { color: var(--wrong); }
 
   /* ── Wisdom banner ── */
   #wisdomBanner {
-    margin: 4px 16px 16px;
+    margin: 4px 16px 12px;
     background: linear-gradient(135deg, var(--navy), var(--ocean));
-    border-radius: 12px; padding: 16px 18px; color: white;
+    border-radius: 12px; padding: 14px 16px; color: white;
   }
-  #wisdomBanner .anchor { font-size: 1.4rem; margin-bottom: 6px; }
-  #wisdomBanner .wisdom-text { font-size: 0.88rem; font-style: italic; line-height: 1.5; }
-  #wisdomBanner .wisdom-attr { font-size: 0.75rem; opacity: 0.8; margin-top: 6px; }
+  #wisdomBanner .anchor { font-size: 1.3rem; margin-bottom: 5px; }
+  #wisdomBanner .wisdom-text {
+    font-size: 0.85rem; font-style: italic; line-height: 1.5;
+  }
+  #wisdomBanner .wisdom-attr {
+    font-size: 0.72rem; opacity: 0.8; margin-top: 5px;
+  }
 
-  /* ── Progress ── */
+  /* ── Share Your Thoughts ── */
+  #thoughtsSection {
+    margin: 0 16px 16px;
+    background: white; border-radius: 12px; padding: 16px;
+    box-shadow: 0 2px 8px rgba(26,58,92,0.08);
+    border-left: 4px solid var(--gold);
+  }
+  #thoughtsSection h3 {
+    font-size: 0.85rem; color: var(--navy); font-weight: 700;
+    margin-bottom: 10px; display: flex; align-items: center; gap: 6px;
+  }
+  .thoughts-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
+  }
+  .thoughts-col label {
+    font-size: 0.72rem; font-weight: 600; color: var(--ocean);
+    display: block; margin-bottom: 5px;
+  }
+  .thoughts-textarea {
+    width: 100%; height: 90px; padding: 8px 10px;
+    border: 2px solid #c8ddf0; border-radius: 8px;
+    font-size: 0.8rem; color: var(--navy);
+    background: #f8fbff; resize: none; outline: none;
+    font-family: inherit; line-height: 1.5; transition: border-color 0.2s;
+  }
+  .thoughts-textarea:focus { border-color: var(--gold); background: white; }
+  .thoughts-hint {
+    font-size: 0.68rem; color: #8aabcd; margin-top: 4px; font-style: italic;
+  }
+  .thoughts-actions {
+    display: flex; justify-content: flex-end; gap: 8px; margin-top: 10px;
+  }
+  .btn-clear {
+    padding: 6px 14px; border-radius: 6px; border: 1px solid #c8ddf0;
+    font-size: 0.75rem; color: #8aabcd; background: white; cursor: pointer;
+  }
+  .btn-save {
+    padding: 6px 16px; border-radius: 6px; border: none;
+    font-size: 0.75rem; color: white;
+    background: linear-gradient(90deg, var(--navy), var(--ocean)); cursor: pointer;
+    font-weight: 600;
+  }
+  .saved-msg {
+    font-size: 0.72rem; color: var(--correct); font-weight: 600;
+    opacity: 0; transition: opacity 0.3s; align-self: center;
+  }
+  .saved-msg.show { opacity: 1; }
+
+  /* ── Progress bar ── */
   #progressBar {
-    background: white; padding: 14px 16px;
-    border-top: 1px solid #dde8f4; position: sticky; bottom: 0;
-    box-shadow: 0 -2px 8px rgba(0,0,0,0.08);
+    background: white; padding: 12px 16px;
+    border-top: 1px solid var(--border);
+    position: fixed; bottom: 0; left: 0; right: 0;
+    box-shadow: 0 -2px 8px rgba(0,0,0,0.08); z-index: 50;
   }
   #progressBar .bar-wrap {
-    background: #dde8f4; border-radius: 99px; height: 8px; margin-bottom: 6px;
+    background: #dde8f4; border-radius: 99px; height: 7px; margin-bottom: 5px;
   }
   #progressBar .bar-fill {
     background: linear-gradient(90deg, var(--ocean), var(--wave));
-    height: 8px; border-radius: 99px; transition: width 0.4s;
+    height: 7px; border-radius: 99px; transition: width 0.4s;
   }
-  #progressBar .bar-label { font-size: 0.78rem; color: var(--ocean); font-weight: 600; }
-
-  /* ── Chapter title ── */
-  #chapterTitle {
-    padding: 14px 16px 4px;
-    font-size: 0.9rem; font-weight: 700; color: var(--ocean);
+  #progressBar .bar-label {
+    font-size: 0.75rem; color: var(--ocean); font-weight: 600;
   }
 </style>
 </head>
 <body>
 
 <header>
-  <h1>⚓ 나의 어린 선원에게 · To My Little Sailor</h1>
-  <p>필사 연습 · Writing Practice</p>
+  <h1>⚓ To My Little Sailor · 나의 어린 선원에게</h1>
+  <p>Reading Journal</p>
 </header>
 
 <div id="chapterSelect">
-  <label>📖 챕터 선택 · Select Chapter</label>
+  <label>📖 Chapter Select · 챕터 선택</label>
   <select id="chapSel" onchange="loadChapter(this.value)"></select>
 </div>
 
 <div id="langToggle">
-  <button class="lang-btn active" onclick="setLang('ko')" id="btnKo">🇰🇷 한국어</button>
-  <button class="lang-btn" onclick="setLang('en')" id="btnEn">🇬🇧 English</button>
+  <button class="lang-btn active" onclick="setPrimary('en')" id="btnEn">🇬🇧 English First</button>
+  <button class="lang-btn" onclick="setPrimary('ko')" id="btnKo">🇰🇷 한국어 먼저</button>
 </div>
 
 <div id="chapterTitle"></div>
+
+<div id="twoColHeader">
+  <div class="col-label en" id="colLabelLeft">🇬🇧 English</div>
+  <div class="col-label ko" id="colLabelRight">🇰🇷 한국어</div>
+</div>
+
 <div id="sentenceArea"></div>
 <div id="wisdomBanner"></div>
 
+<!-- Share Your Thoughts -->
+<div id="thoughtsSection">
+  <h3>✍️ Share Your Thoughts · 나의 생각 기록</h3>
+  <div class="thoughts-grid">
+    <div class="thoughts-col">
+      <label>🇬🇧 Write in English</label>
+      <textarea class="thoughts-textarea" id="thoughtsEn"
+        placeholder="What did you feel or learn from this chapter?"></textarea>
+      <div class="thoughts-hint">Write freely in your own words.</div>
+    </div>
+    <div class="thoughts-col">
+      <label>🇰🇷 한국어로 쓰기</label>
+      <textarea class="thoughts-textarea" id="thoughtsKo"
+        placeholder="이 챕터에서 느끼거나 배운 점을 써봐요."></textarea>
+      <div class="thoughts-hint">자유롭게 나만의 언어로 써봐요.</div>
+    </div>
+  </div>
+  <div class="thoughts-actions">
+    <span class="saved-msg" id="savedMsg">✅ Saved!</span>
+    <button class="btn-clear" onclick="clearThoughts()">Clear</button>
+    <button class="btn-save" onclick="saveThoughts()">Save 💾</button>
+  </div>
+</div>
+
 <div id="progressBar">
   <div class="bar-wrap"><div class="bar-fill" id="barFill" style="width:0%"></div></div>
-  <div class="bar-label" id="barLabel">0 / 7 완료</div>
+  <div class="bar-label" id="barLabel">0 / 14 completed</div>
 </div>
 
 <script>
-// ── Chapter data ──────────────────────────────────────────────
 const CHAPTERS = [
   {
-    id:"1-1", title:"Chapter 1-1. The Beauty of Simply Being",
+    id:"1-1",
+    title:"Chapter 1-1. The Beauty of Just Being",
     titleKo:"1-1장. 존재 자체의 아름다움",
     en:[
       "I am enough just as I am.",
       "My value comes not from what I do, but from who I am.",
       "Every small thing in the world has its own reason to exist.",
-      "Just like a puppy's poo helped a flower bloom, I too have a purpose.",
-      "The star inside me has been shining all along.",
-      "I do not need to be perfect to be precious.",
-      "Today, I celebrate the simple beauty of being me."
+      "Just like a puppy poo helped a flower bloom, I too have a purpose.",
+      "The real star was always shining inside me.",
+      "I do not need to be perfect or special to be precious.",
+      "Today, I celebrate the simple beauty of just being me."
     ],
     ko:[
       "나는 지금 이대로 충분히 소중한 존재야.",
-      "나의 가치는 내가 무엇을 하느냐가 아니라, 내가 어떤 사람이냐에서 나온단다.",
+      "나의 가치는 내가 무엇을 하느냐가 아니라, 내가 어떤 사람이냐에서 나와.",
       "세상의 모든 작은 것에는 저마다 존재의 이유가 있어.",
       "강아지똥이 민들레를 피웠듯, 나에게도 반드시 쓰임이 있어.",
-      "내 마음속 별은 언제나 빛나고 있었어.",
-      "완벽하지 않아도 나는 충분히 소중해.",
-      "오늘, 그냥 나로 존재하는 것만으로도 아름다워."
+      "진짜 별은 언제나 내 마음속에서 빛나고 있었어.",
+      "완벽하지 않아도, 특별하지 않아도 나는 소중해.",
+      "오늘, 그냥 나로 존재하는 것만으로도 충분히 아름다워."
     ],
-    wisdom:"때로는 항해 그 자체가 항구에 도착하는 것보다 더 큰 기쁨이다.",
-    wisdomAttr:"선원의 격언"
+    wisdomEn:"\"Sometimes the journey itself is greater joy than arriving at the port.\"",
+    wisdomKo:"\"때로는 항해 그 자체가 항구에 도착하는 것보다 더 큰 기쁨이다.\"",
+    wisdomAttr:"Sailor\'s Wisdom · 선원의 지혜"
   },
   {
-    id:"1-2", title:"Chapter 1-2. Building Self-Esteem",
+    id:"1-2",
+    title:"Chapter 1-2. Building Self-Esteem, Believe in Yourself",
     titleKo:"1-2장. 자존감 높이기, 자기 믿음",
     en:[
-      "I have a special light inside me that no one else has.",
-      "My light shines brightest when I smile and try again.",
-      "I believe in my own worth, talent, and potential.",
-      "Even when others seem faster or better, I have my own gifts.",
-      "Every morning, I whisper to myself: I can do this.",
-      "I do not need to compete — I only need to believe in me.",
-      "Trusting myself is the greatest act of courage I can give myself."
+      "I have my own special light that no one else has.",
+      "My light shines when I smile, try again, and care about others.",
+      "I believe in my own worth, my talent, and my potential.",
+      "Nobody else can believe in me better than I can.",
+      "Each day, I whisper to myself: I can do it.",
+      "I learn to trust myself a little more every day.",
+      "Trusting myself is the greatest gift I can give to myself."
     ],
     ko:[
-      "나에게는 나만이 가진 특별한 빛이 있어.",
-      "내 빛은 내가 웃을 때, 다시 도전할 때 가장 밝게 빛나.",
-      "나는 내 가치와 재능과 가능성을 믿어.",
-      "누가 나보다 빠르거나 잘해도, 나에게는 나만의 특별함이 있어.",
-      "매일 아침 나에게 속삭여: 넌 할 수 있어.",
-      "경쟁하지 않아도 돼. 그냥 나 자신을 믿으면 충분해.",
-      "나를 믿는 것이 내가 나에게 줄 수 있는 가장 큰 용기야."
+      "나에게는 세상에 나만이 가진 특별한 빛이 있어.",
+      "그 빛은 내가 웃을 때, 다시 도전할 때, 다른 사람을 배려할 때 빛나.",
+      "나는 내 가치와 재능, 그리고 가능성을 믿어.",
+      "아무도 나보다 나를 더 잘 믿어줄 수는 없어.",
+      "매일 아침 나에게 속삭여: 사랑하는 얘야, 넌 해낼 수 있어.",
+      "나는 매일 조금씩 더 나 자신을 믿는 법을 배워가고 있어.",
+      "나를 믿는 것이 내가 나에게 줄 수 있는 가장 큰 선물이야."
     ],
-    wisdom:"두려움에 닻을 내리지 말고, 믿음으로 돛을 올려라.",
-    wisdomAttr:"선원의 격언"
+    wisdomEn:"\"Do not drop anchor in fear, but raise the sails with faith.\"",
+    wisdomKo:"\"두려움에 닻을 내리지 말고, 믿음으로 돛을 올려라.\"",
+    wisdomAttr:"Sailor\'s Wisdom · 선원의 지혜"
   },
   {
-    id:"1-3", title:"Chapter 1-3. Understanding Your Feelings",
+    id:"1-3",
+    title:"Chapter 1-3. Understanding Your Feelings",
     titleKo:"1-3장. 자신의 감정 이해하기",
     en:[
-      "All my feelings are welcome — happy, sad, angry, or scared.",
-      "Feelings come and go like waves, and that is perfectly okay.",
+      "It is okay to feel happy, sad, angry, or scared.",
+      "Every feeling comes and goes like a wave in the sea.",
       "When I speak about my feelings, they begin to calm down.",
-      "Hiding my feelings does not make them disappear.",
-      "It is brave to say: I feel upset right now.",
-      "Being honest with my heart is how I start to love myself.",
-      "Every feeling I have is a signal — and I am learning to listen."
+      "Being honest with my heart is the first step to loving myself.",
+      "It is brave to say I feel upset right now.",
+      "My feelings show me who I am and what I need.",
+      "One day I will discover that honesty with my heart is self-love."
     ],
     ko:[
-      "기쁨도, 슬픔도, 화남도, 두려움도 모두 내 감정이야.",
-      "감정은 파도처럼 왔다가 가는 것, 그게 자연스러운 거야.",
-      "감정을 말하면, 파도가 해변에 닿듯 마음도 차분해져.",
-      "감정을 숨긴다고 사라지지 않아. 마음속에 조용히 머물 뿐이야.",
-      "지금 속상해라고 말하는 것은 정말 용기 있는 일이야.",
-      "마음에 솔직해지는 것이 나를 사랑하는 첫걸음이야.",
-      "내 감정 하나하나는 소중한 신호야. 나는 그 신호를 배우는 중이야."
+      "기쁠 때도 있고, 슬플 때도 있고, 화가 나거나 무서울 때도 있어.",
+      "모든 감정은 바다의 파도처럼 찾아왔다가 멀어져 가는거야.",
+      "감정을 솔직하게 말하면 파도가 해변에 닿듯 마음도 차분해져.",
+      "마음에 솔직해지는 것이 바로 스스로를 사랑하는 첫걸음이야.",
+      "지금 속상해라고 말하는 것은 정말 용기 있는 행동이야.",
+      "내 감정은 내가 누구인지, 무엇을 원하는지를 알려줘.",
+      "언젠가 마음에 솔직해지는 것이 자기 사랑임을 알게 될 거야."
     ],
-    wisdom:"고요한 바다는 하늘을 비추고, 정직한 마음은 영혼을 비춘다.",
-    wisdomAttr:"선원의 격언"
+    wisdomEn:"\"The calm sea reflects the sky and the honest heart reflects the soul.\"",
+    wisdomKo:"\"고요한 바다는 하늘을 비추고, 정직한 마음은 영혼을 비춘다.\"",
+    wisdomAttr:"Sailor\'s Wisdom · 선원의 지혜"
   },
   {
-    id:"1-4", title:"Chapter 1-4. Being Yourself",
+    id:"1-4",
+    title:"Chapter 1-4. Being Yourself",
     titleKo:"1-4장. 자기다움",
     en:[
-      "I do not need to be like everyone else.",
-      "Just as every star shines differently, I shine in my own way.",
+      "I do not have to be like everyone else.",
+      "Just like every star shines in its own way, I shine when I am truly myself.",
       "My heart already knows what feels right for me.",
-      "Being different is not being wrong — it is being truly myself.",
+      "Being different does not mean being wrong.",
+      "It is okay to walk slower, smile bigger, or dream further.",
       "The world needs my color, my voice, and my way of seeing things.",
-      "I can walk slower, smile bigger, and dream further.",
-      "There is no one else in this world quite like me, and that is my greatest gift."
+      "There is no one else in this world quite like me."
     ],
     ko:[
-      "나는 다른 사람처럼 될 필요가 없어.",
-      "별들이 저마다 다른 빛으로 빛나듯, 나는 내 방식으로 빛나.",
-      "내 마음은 이미 무엇이 나에게 맞는지 알고 있어.",
-      "다르다는 건 틀린 게 아니야. 그게 진짜 나다운 거야.",
-      "세상은 나만의 색깔, 목소리, 시선을 필요로 해.",
-      "조금 느려도, 크게 웃어도, 더 크게 꿈꿔도 괜찮아.",
-      "세상에 나 같은 사람은 또 없어. 그게 나의 가장 큰 선물이야."
+      "나는 꼭 다른 사람처럼 될 필요가 없어.",
+      "별들이 저마다 다른 빛으로 빛나듯, 나도 나 자신일 때 가장 빛나.",
+      "내 마음은 이미 무엇이 나에게 맞는지 잘 알고 있어.",
+      "다르다는 건 틀린 게 아니야. 그건 진짜 나답게 살아가는 거야.",
+      "조금 천천히 걸어도, 크게 웃어도, 더 크게 꿈꿔도 괜찮아.",
+      "세상은 나만의 색깔, 목소리, 그리고 시선을 필요로 해.",
+      "이 세상 어디에도 나 같은 사람은 또 없으니까."
     ],
-    wisdom:"다른 배들의 궤적을 좇는 배는 결코 자신만의 새로운 섬을 발견할 수 없다.",
-    wisdomAttr:"선원의 격언"
+    wisdomEn:"\"The ship that follows the wakes of other vessels can never discover a new island of its own.\"",
+    wisdomKo:"\"다른 배들의 궤적을 좇는 배는 결코 자신만의 새로운 섬을 발견할 수 없다.\"",
+    wisdomAttr:"Sailor\'s Wisdom · 선원의 지혜"
   },
   {
-    id:"1-5", title:"Chapter 1-5. Keep Asking Yourself Questions",
+    id:"1-5",
+    title:"Chapter 1-5. Keep Asking Yourself Questions",
     titleKo:"1-5장. 끊임없이 스스로에게 질문하기",
     en:[
       "Asking questions means I am brave enough to keep learning.",
-      "Every question I ask opens a new door in my mind.",
-      "Why is that and what if I try this are questions that make me grow.",
-      "Questions show care and interest in others and myself.",
-      "I am not afraid to look curious, because curiosity is my superpower.",
-      "Today I ask myself: Why do I feel this way?",
-      "Every time I ask, I grow a little wiser and a little stronger."
+      "Every question opens a new door in my mind.",
+      "Why is that and what if I try this are questions that help me grow.",
+      "Asking questions shows care and interest in others.",
+      "I never stop being curious, because curiosity is my light.",
+      "I ask myself: Why do I feel this way?",
+      "Every time I ask, I grow a little wiser and stronger."
     ],
     ko:[
-      "질문을 많이 하는 건 배우고 싶은 용감한 마음의 증거야.",
+      "질문을 많이 하는 건 배우고 싶어 하는 용감한 마음의 증거야.",
       "질문할 때마다 내 마음속 새로운 문이 열려.",
       "왜 그런 걸까, 만약 이렇게 해보면은 나를 성장시키는 질문이야.",
-      "질문은 상대방에 대한 관심이자 배려이기도 해.",
-      "호기심을 갖는 것을 두려워하지 않아. 호기심은 나의 능력이야.",
-      "오늘 나에게 물어볼게: 나는 왜 이런 기분이 들까?",
+      "질문하는 것은 상대방에 대한 배려이고 관심이기도 해.",
+      "나는 항상 궁금해하는 것을 멈추지 않을 거야.",
+      "나에게 이렇게 질문해봐: 나는 왜 이런 기분일까?",
       "질문할 때마다 나는 조금씩 더 지혜롭고 강해져."
     ],
-    wisdom:"지속적으로 항로를 점검하지 않는 선장은 결국 난파하거나, 원치 않는 항구에 닿게 된다.",
-    wisdomAttr:"선원의 격언"
+    wisdomEn:"\"A captain who does not continuously check the course will eventually arrive at an unintended port.\"",
+    wisdomKo:"\"지속적으로 항로를 점검하지 않는 선장은 결국 원치 않는 항구에 닿게 된다.\"",
+    wisdomAttr:"Sailor\'s Wisdom · 선원의 지혜"
   },
   {
-    id:"1-6", title:"Chapter 1-6. The Value and Meaning of Time",
+    id:"1-6",
+    title:"Chapter 1-6. The Value and Meaning of Time",
     titleKo:"1-6장. 시간의 가치와 의미",
     en:[
-      "Time is even more precious than money because it never comes back.",
-      "Every hour I spend is an investment in my own life.",
-      "When I learn, care for my health, and love others, my time multiplies.",
-      "I will not let my most precious treasure quietly slip away.",
-      "True wealth begins with knowing how to use time wisely.",
-      "Time spent on what truly matters grows like interest in a savings account.",
-      "My time is my life — and I will treat it with great care."
+      "Time is even more valuable than money because it never returns.",
+      "Every hour I spend is like an investment in my own life.",
+      "When I use time to learn or care for others, it multiplies like interest.",
+      "True wealth comes from understanding how to use time wisely.",
+      "Time itself is life, just like in the movie In Time.",
+      "My time is my most precious treasure.",
+      "I will never forget that the hours I spend today become my life."
     ],
     ko:[
-      "시간은 돈보다 소중해. 한 번 지나가면 다시 오지 않으니까.",
-      "내가 보내는 모든 시간은 내 삶에 대한 투자야.",
-      "배우고, 건강을 돌보고, 사랑하는 시간은 이자처럼 불어나.",
-      "가장 소중한 보물이 조용히 흘러가게 두지 않을 거야.",
-      "진정한 부는 시간을 지혜롭게 쓰는 법을 아는 데서 시작돼.",
-      "중요한 일에 쓴 시간은 저금통에 금을 넣는 것과 같아.",
-      "나의 시간은 나의 삶이야. 나는 그것을 소중히 대할 거야."
+      "시간은 돈보다 훨씬 더 귀한 것이야. 한 번 지나가면 다시 오지 않으니까.",
+      "내가 보내는 모든 시간은 내 삶에 대한 투자와 같아.",
+      "배우거나 건강을 돌보는 시간은 이자가 붙듯 가치가 커져가.",
+      "진짜 부는 시간을 어떻게 쓰는지를 아는 데서 와.",
+      "영화 인타임에서처럼, 시간은 곧 삶 그 자체야.",
+      "나의 시간은 내 인생에서 가장 소중한 보물이야.",
+      "오늘 내가 보내는 시간들이 모여 나만의 소중한 인생이 된다는 걸 잊지 않을게."
     ],
-    wisdom:"기회의 바람이 불 때 돛을 채워라.",
-    wisdomAttr:"선원의 격언"
+    wisdomEn:"\"A sailor who wastes the fair wind will find no wind at all.\"",
+    wisdomKo:"\"기회의 바람을 놓친 자에게 더 이상의 기회는 찾아오지 않는다.\"",
+    wisdomAttr:"Sailor\'s Wisdom · 선원의 지혜"
   },
   {
-    id:"1-7", title:"Chapter 1-7. Being Grateful for What We Have",
+    id:"1-7",
+    title:"Chapter 1-7. Being Grateful for What We Have",
     titleKo:"1-7장. 우리가 가진 것에 감사하기",
     en:[
-      "Gratitude begins when I notice the small, beautiful things around me.",
+      "Gratitude begins when I notice the small beautiful things around me.",
       "The warmth of sunlight and a friend's smile are reasons to be thankful.",
       "I do not need to have everything to feel rich.",
       "A grateful heart turns enough into plenty.",
-      "It is not happiness that makes me grateful — it is gratitude that makes me happy.",
-      "Tonight, before I sleep, I will whisper: I am thankful for today.",
-      "When I look at the world with gratitude, ordinary days feel truly special."
+      "It is not happiness that makes us grateful but gratitude that makes us happy.",
+      "Every night, before I sleep, I whisper: I am thankful for today.",
+      "When my heart is thankful, even ordinary days feel truly special."
     ],
     ko:[
-      "감사는 작고 아름다운 것을 알아채는 것에서 시작돼.",
-      "햇살의 따뜻함과 친구의 미소도 감사할 이유가 돼.",
+      "감사는 아주 작은 것에서 시작돼.",
+      "햇살의 따뜻함, 친구의 미소도 모두 감사할 이유가 돼.",
       "모든 걸 다 갖지 않아도 풍요롭게 느낄 수 있어.",
       "감사하는 마음은 충분함을 풍요로움으로 바꿔줘.",
       "행복해서 감사한 게 아니라, 감사하기 때문에 행복해지는 거야.",
-      "잠들기 전 속삭일게: 오늘 하루도 감사합니다.",
-      "감사의 눈으로 바라보면 평범한 하루가 특별해져."
+      "잠들기 전 이렇게 속삭여봐: 오늘 하루도 감사합니다.",
+      "감사하는 마음이 있으면 평범한 하루도 특별하게 느껴져."
     ],
-    wisdom:"감사하는 마음은 인생의 폭풍 속에서도 우리를 단단히 붙잡아주는 닻이다.",
-    wisdomAttr:"선원의 격언"
+    wisdomEn:"\"A thankful heart is the anchor that keeps us steady in life\'s storms.\"",
+    wisdomKo:"\"감사하는 마음은 인생의 폭풍 속에서도 우리를 단단히 붙잡아주는 닻과 같다.\"",
+    wisdomAttr:"Sailor\'s Wisdom · 선원의 지혜"
   },
   {
-    id:"1-8", title:"Chapter 1-8. Compare Yourself with Yesterday",
-    titleKo:"1-8장. 어제의 나보다 조금 더 나은 오늘의 나",
+    id:"1-8",
+    title:"Chapter 1-8. Compare Your Present Self with Your Yesterday Self",
+    titleKo:"1-8장. 어제의 나보다 조금 더 발전한 오늘의 나",
     en:[
       "The only person I need to compare myself with is who I was yesterday.",
-      "Small improvements, when gathered, create great transformation.",
-      "Today I made a slightly better choice than yesterday — that is growth.",
+      "Growth comes from making slightly better choices each day.",
+      "Small improvements, when accumulated, create profound transformation.",
       "Progress may feel slow, but what matters is not losing direction.",
-      "I ask myself each day: How have I improved from yesterday?",
-      "At the end of this path, I will find the best version of myself.",
+      "When I ask how have I improved from yesterday, I am already growing.",
+      "At the end of this path, I find the truest most evolved myself.",
       "Every tiny step forward is a quiet miracle in the making."
     ],
     ko:[
-      "내가 비교해야 할 사람은 오직 어제의 나뿐이야.",
-      "작은 발전이 쌓이면 결국 큰 변화가 만들어져.",
-      "오늘 어제보다 조금 더 나은 선택을 했어. 그게 성장이야.",
+      "진정한 비교의 대상은 남이 아닌 어제의 나 자신이야.",
+      "성장은 매일 더 나은 선택을 통해 이루어져.",
+      "작은 발전이 쌓이면 큰 변화를 만들어내.",
       "변화가 느리게 느껴져도 방향을 잃지 않는 게 중요해.",
-      "매일 자신에게 물어봐: 나는 어제보다 얼마나 나아졌을까?",
-      "이 길의 끝에는 가장 진실하고 멋지게 성장한 내가 기다리고 있어.",
+      "나는 어제보다 얼마나 나아졌는가를 묻는 순간 이미 성장의 길 위에 있어.",
+      "이 길의 끝에는 가장 진실하고 멋지게 성장한 내 자신이 기다리고 있어.",
       "아주 작은 걸음 하나하나가 조용한 기적을 만들고 있어."
     ],
-    wisdom:"항해에 있어 가장 중요한 것은 매번 방향을 조금씩 조정하는 것이다.",
-    wisdomAttr:"선원의 격언"
+    wisdomEn:"\"The most important thing in a voyage is to correct your direction little by little every time.\"",
+    wisdomKo:"\"항해에 있어 가장 중요한 것은 매번 방향을 조금씩 조정하는 것이다.\"",
+    wisdomAttr:"Sailor\'s Wisdom · 선원의 지혜"
   },
   {
-    id:"1-9", title:"Chapter 1-9. Passive Income",
+    id:"1-9",
+    title:"Chapter 1-9. Passive Income, the Path to Freedom from Time",
     titleKo:"1-9장. 수동적 소득, 시간으로부터 자유로워지는 법",
     en:[
-      "True freedom begins when I no longer trade all my time for money.",
+      "True freedom begins when I no longer have to trade my time for money.",
       "Passive income is about reclaiming my time, not just earning more.",
-      "A system that works even while I rest is a gift to my future self.",
-      "I do not need to start big — a small seed of investment is enough.",
-      "Consistent learning and a long-term mindset will grow my future.",
-      "True wealth is measured not by money but by how freely I use my time.",
+      "Building a system that works while I rest is a gift to my future self.",
+      "It does not have to start big, a small investment is enough.",
+      "Consistent learning and a long-term mindset plant the seed.",
+      "True wealth is not measured by money but by how freely I use my time.",
       "I am planting seeds today so that tomorrow I can live more freely."
     ],
     ko:[
-      "진정한 자유는 시간을 돈으로 바꾸지 않아도 될 때 시작돼.",
-      "수동적 소득은 돈을 더 버는 것이 아니라 시간을 되찾는 거야.",
-      "내가 쉴 때도 일해주는 시스템은 미래의 나에게 주는 선물이야.",
-      "크게 시작하지 않아도 돼. 작은 투자의 씨앗으로 충분해.",
-      "꾸준한 배움과 긴 안목이 나의 미래를 키워줄 거야.",
-      "진정한 부는 돈이 아니라 시간을 자유롭게 쓸 수 있는 것이야.",
+      "진정한 자유는 시간을 돈으로 바꾸지 않아도 되는 순간부터 시작돼.",
+      "수동적 소득은 돈을 더 버는 것이 아니라 시간을 되찾는 방법이야.",
+      "쉬고 있을 때도 일해주는 시스템은 미래의 나에게 주는 선물이야.",
+      "그 시작은 크지 않아도 돼. 작은 투자의 씨앗으로 충분해.",
+      "꾸준한 배움과 긴 안목이 씨앗이 된단다.",
+      "진정한 부는 돈이 아니라 시간을 얼마나 자유롭게 쓸 수 있는지야.",
       "오늘 씨앗을 심어서 내일은 더 자유롭게 살아갈 거야."
     ],
-    wisdom:"바람을 다스리는 자가 비로소 쉴 자격을 얻는다.",
-    wisdomAttr:"선원의 격언"
+    wisdomEn:"\"He who masters the wind earns his rest.\"",
+    wisdomKo:"\"바람을 다스리는 자가 비로소 쉴 자격을 얻는다.\"",
+    wisdomAttr:"Sailor\'s Wisdom · 선원의 지혜"
   },
   {
-    id:"1-10", title:"Chapter 1-10. Imagining Your Future Self",
+    id:"1-10",
+    title:"Chapter 1-10. Imagining Your Future Self",
     titleKo:"1-10장. 미래의 자신을 상상하기",
     en:[
       "Imagination is the power to live as my future self in advance.",
-      "Every image I paint in my mind can gradually become real.",
-      "My future self will grow as large as what I imagine and believe today.",
-      "Imagination is not just a dream — it is energy that moves me forward.",
-      "Each day, I picture a better version of myself, and that vision guides me.",
-      "I ask myself today: What kind of future self am I imagining?",
+      "Every image I paint in my mind gradually comes true through belief and action.",
+      "My future self will grow in proportion to what I imagine and believe today.",
+      "Imagination is not merely a dream but the energy that moves me forward.",
+      "If I visualize a better version of myself each day, that vision becomes reality.",
+      "I ask myself as I grow: What kind of future self am I imagining?",
       "The life I dream of is already beginning to take shape inside me."
     ],
     ko:[
       "상상력은 미래의 나를 미리 살아보는 힘이야.",
-      "내 마음속에 그리는 장면은 믿음과 행동으로 현실이 돼.",
-      "미래의 나는 지금 내가 상상하는 만큼 성장할 거야.",
-      "상상은 단순한 꿈이 아니라 오늘의 나를 움직이는 에너지야.",
-      "매일 조금 더 나은 나를 그리며 살아가면 그 상상이 현실이 돼.",
-      "오늘 나에게 물어볼게: 나는 어떤 미래의 나를 그리고 있을까?",
-      "내가 꿈꾸는 삶은 이미 내 안에서 모양을 갖추기 시작했어."
+      "내가 마음속에 그리는 장면은 믿음과 행동을 통해 현실이 돼.",
+      "미래의 나는 지금 내가 상상하고 믿는 만큼 성장해.",
+      "상상은 단순한 꿈이 아니라 오늘의 나를 움직이게 하는 에너지야.",
+      "매일 조금씩 더 나은 자신을 그리며 살아가면 그 상상은 현실이 돼.",
+      "성장하는 나에게 물어봐: 나는 어떤 미래의 나를 그리고 있는가?",
+      "내가 꿈꾸는 삶은 이미 내 안에서 시작되고 있어."
     ],
-    wisdom:"목표가 없는 선원에게는 어떤 바람도 순풍이 될 수 없다.",
-    wisdomAttr:"세네카"
+    wisdomEn:"\"No wind is favorable to a sailor who does not know what port he is making.\"",
+    wisdomKo:"\"목표가 없는 선원에게는 어떤 바람도 순풍이 될 수 없다.\"",
+    wisdomAttr:"Seneca · 세네카"
   },
   {
-    id:"2-1", title:"Chapter 2-1. The Power of Small Steps",
+    id:"2-1",
+    title:"Chapter 2-1. The Power of Small Steps",
     titleKo:"2-1장. 작은 걸음의 힘",
     en:[
       "Every big dream begins with one small step.",
-      "It is not about running fast, but about not stopping.",
+      "That step will become my path if I keep moving forward.",
+      "It is not about running fast but about not stopping.",
       "Consistency matters more than perfection.",
-      "Each small step builds my confidence for the next one.",
-      "I move forward at my own pace, and that is perfectly fine.",
-      "Small steps create big miracles at the end of the day.",
-      "I will keep going, even when the steps feel tiny."
+      "Each small change builds my confidence leading to the next step.",
+      "I move forward at my own pace without rushing.",
+      "Small steps create big miracles at the end of the day."
     ],
     ko:[
-      "큰 꿈도 처음엔 아주 작은 한 걸음에서 시작해.",
+      "큰 꿈을 이룬 사람들도 처음엔 아주 작은 한 걸음에서 시작해.",
+      "계속 나아가면 그 한 걸음이 너의 길이 될 수도 있어.",
       "달리는 것보다 중요한 건 멈추지 않는 거야.",
       "완벽한 것보다 꾸준히 하는 게 더 중요해.",
       "매일의 작은 걸음이 자신감을 불어넣어 주고 또 다른 걸음을 이끌어 줘.",
-      "내 속도대로 나아가면 돼. 그것으로 충분해.",
-      "작은 걸음이 모여 결국 큰 기적을 만들어.",
-      "걸음이 아주 작게 느껴질 때도 나는 계속 나아갈 거야."
+      "조급해하지 말고, 내 속도대로 나아가면 돼.",
+      "작은 걸음이 모여 결국 큰 기적을 만든다는 걸 꼭 기억하자."
     ],
-    wisdom:"배는 한 번의 큰 파도로 움직이지 않고, 수많은 작은 물결의 반복으로 나아간다.",
-    wisdomAttr:"선원의 격언"
+    wisdomEn:"\"The ship does not move by one great wave, but by the repetition of countless small ripples.\"",
+    wisdomKo:"\"배는 한 번의 큰 파도로 움직이지 않고, 수많은 작은 물결의 반복으로 나아간다.\"",
+    wisdomAttr:"Sailor\'s Wisdom · 선원의 지혜"
   },
   {
-    id:"2-2", title:"Chapter 2-2. Finding What You Love",
+    id:"2-2",
+    title:"Chapter 2-2. Finding What You Love",
     titleKo:"2-2장. 좋아하는 것 찾기",
     en:[
       "One of the most beautiful journeys in life is discovering what I truly love.",
-      "I do not have to figure it all out at once — it is okay to take my time.",
-      "Trying new things, even small ones, teaches me something about myself.",
-      "What excites me? What makes my heart feel most alive?",
-      "What I love may not be clear at first, but I will keep exploring.",
-      "When I lose track of time doing something, that is where joy lives.",
-      "In those moments, I feel something that truly feels like me."
+      "I do not have to figure it all out at once.",
+      "Try new things, even the small ones, or those that feel unfamiliar.",
+      "Each experience will teach me something about myself.",
+      "What makes my heart feel most alive?",
+      "If I ever lose track of time doing something, that is where joy lives.",
+      "In that moment, I feel something that truly feels like me."
     ],
     ko:[
-      "진정으로 좋아하는 것을 찾아가는 일은 인생에서 가장 아름다운 여정이야.",
-      "모든 걸 한 번에 알 필요는 없어. 조금 느려도 괜찮아.",
-      "작은 것이라도 새로운 것을 시도하면 나에 대해 무언가 알게 돼.",
-      "무엇이 나를 설레게 하고 내 마음을 가장 살아 있게 만드는걸까?",
-      "좋아하는 것은 처음엔 분명하지 않을 수도 있어. 하지만 계속 탐험할 거야.",
-      "시간 가는 줄 모르고 몰입하는 순간, 그 안에 기쁨이 있어.",
-      "그 순간 뭔가 나답게 느껴지는 기분을 느낄 수 있어."
+      "인생에서 가장 아름다운 여정 중 하나는 진정으로 좋아하는 것을 찾아가는 일이야.",
+      "모든 걸 한 번에 알 필요는 없어.",
+      "작은 일이라도, 낯설게 느껴지는 일이라도 시도해봐.",
+      "그 경험 하나하나가 나 자신에 대해 무언가 알려줄 거야.",
+      "무엇이 내 마음을 가장 살아 있게 만드는지 찾아봐.",
+      "시간 가는 줄 모르고 몰입하는 순간이 있다면, 그 안에 즐거움이 있어.",
+      "그 순간 뭔가 나답게 느껴지는 기분을 느낄 수 있을 거야."
     ],
-    wisdom:"목표가 없는 선원에게는 어떤 바람도 순풍이 될 수 없다.",
-    wisdomAttr:"세네카"
+    wisdomEn:"\"The ship that has no destination wanders every sea and finds none.\"",
+    wisdomKo:"\"목적지 없는 배는 온 바다를 방황해도 어떤 곳도 찾을 수가 없다.\"",
+    wisdomAttr:"Sailor\'s Wisdom · 선원의 지혜"
   },
   {
-    id:"2-3", title:"Chapter 2-3. Creating Your Own Routine",
+    id:"2-3",
+    title:"Chapter 2-3. Creating Your Own Routine",
     titleKo:"2-3장. 너만의 루틴 만들기",
     en:[
-      "Having a routine is about creating a rhythm that keeps me balanced.",
+      "Having a routine is about creating my own rhythm that keeps me balanced.",
       "Simple morning habits make my mind clearer and my body healthier.",
-      "A good routine does not need to be perfect — just consistent for me.",
-      "There will be days when things do not go as planned, and that is okay.",
-      "My routine guides my positive energy in the right direction.",
-      "Over time, my routine becomes a reflection of who I am and who I am growing.",
-      "I create my own rhythm, and I trust it to carry me forward."
+      "A good routine does not need to be perfect, just consistent for me.",
+      "There will be days when things do not go as planned and that is okay.",
+      "My routine creates a steady flow that guides my positive energy.",
+      "Over time my routine becomes a reflection of who I am and who I am growing.",
+      "I trust my own rhythm to carry me forward."
     ],
     ko:[
-      "루틴은 나를 균형 있게 지탱해주는 리듬을 만드는 일이야.",
-      "아침의 작은 습관들이 마음을 맑게 하고 몸을 더 건강하게 해줘.",
+      "루틴을 가진다는 건 나를 균형 있게 지탱해주는 리듬을 만드는 일이야.",
+      "아침의 작은 습관들은 마음을 맑게 하고 몸을 더 건강하게 해줘.",
       "루틴이 완벽할 필요는 없어. 나에게 맞는 지속적인 루틴이면 돼.",
       "계획대로 되지 않는 날들도 있어. 그것도 괜찮아.",
       "루틴은 나의 긍정 에너지를 좋은 방향으로 흘러가게 만들어 줘.",
       "시간이 지나면서 내 루틴이 지금의 나와 성장하는 나를 담게 될 거야.",
-      "나만의 리듬을 만들고, 그 흐름을 믿을 거야."
+      "나만의 리듬을 믿고 그 흐름을 따라갈 거야."
     ],
-    wisdom:"항구에 도착하려면 돛을 올려야 한다. 그냥 떠다니는 것도 안 된다.",
-    wisdomAttr:"프랭클린 루즈벨트"
+    wisdomEn:"\"If you want to reach the port, you must set the sails. Nor should you just drift.\"",
+    wisdomKo:"\"항구에 도착하려면 돛을 올려야 한다. 그냥 떠다니는 것도 안 된다.\"",
+    wisdomAttr:"Franklin D. Roosevelt · 프랭클린 루즈벨트"
   },
   {
-    id:"2-4", title:"Chapter 2-4. The Time of Patience",
-    titleKo:"2-4장. 인내의 시간",
+    id:"2-4",
+    title:"Chapter 2-4. Waiting Until the Time is Right",
+    titleKo:"2-4장. 때를 기다리는 것",
     en:[
       "Every seed takes time before it blooms.",
-      "I cannot rush the sunrise, nor can I hurry a flower to blossom.",
-      "Patience is trusting that my efforts are growing roots, even when I cannot see them.",
+      "I cannot rush the sunrise nor hurry a flower to blossom.",
+      "Patience is trusting that my efforts are growing roots even when I cannot see them.",
       "I keep watering my dreams with small actions and steady faith.",
-      "Progress may feel slow, but everything is unfolding in its own beautiful timing.",
-      "One day, I will look back and realize everything happened just right.",
-      "I trust the quiet, beautiful timing of my own journey."
+      "Sometimes progress feels slow but what truly matters is not losing direction.",
+      "One day I will look back and realize everything was unfolding perfectly.",
+      "I trust the quiet beautiful timing of my own journey."
     ],
     ko:[
       "모든 씨앗은 꽃을 피우기까지 시간이 걸려.",
       "해 뜨는 것을 재촉할 수 없듯이, 꽃이 피는 것도 서두를 수 없어.",
-      "인내는 아직 보이지 않아도 뿌리를 내리고 있다고 믿는 마음이야.",
+      "인내심이란 아직 보이지 않아도 뿌리를 내리고 있다고 믿는 마음이야.",
       "작은 행동과 변함없는 믿음으로 나의 꿈에 계속 물을 줄 거야.",
-      "변화가 느리게 느껴져도, 모든 것은 절묘한 타이밍에 펼쳐지고 있어.",
-      "언젠가 뒤돌아보면 모든 것이 완벽하게 이루어졌음을 깨닫게 될 거야.",
+      "변화가 느리게 느껴져도 중요한 것은 방향을 잃지 않는 것이야.",
+      "언젠가 뒤돌아보면 모든 것이 절묘한 타이밍에 펼쳐졌음을 깨닫게 될 거야.",
       "나만의 조용하고 아름다운 타이밍을 믿어."
     ],
-    wisdom:"역풍이 불어와도 계속 노를 저어라.",
-    wisdomAttr:"선원의 격언"
+    wisdomEn:"\"Row when the wind is against you.\"",
+    wisdomKo:"\"역풍이 불어와도 계속 노를 저어라.\"",
+    wisdomAttr:"Sailor\'s Wisdom · 선원의 지혜"
   },
   {
-    id:"2-5", title:"Chapter 2-5. Learning from Mistakes",
+    id:"2-5",
+    title:"Chapter 2-5. Learning from Mistakes",
     titleKo:"2-5장. 실수로부터 배우기",
     en:[
-      "Mistakes are not signs of failure — they remind me that I am learning.",
+      "Mistakes are not signs of failure but gentle reminders that I am learning.",
       "Every time I stumble, I discover a new way to stand up again.",
-      "Instead of asking why did I mess up, I ask what is this trying to teach me.",
-      "The lessons from mistakes often stay longer than any perfect success.",
-      "When I make a mistake, I speak to myself kindly, like a good friend.",
-      "Even the greatest sailors once drifted off course before learning to steer.",
-      "If I keep learning, no mistake is ever wasted — it becomes part of my wisdom."
+      "Instead of asking why did I mess up I ask what is this trying to teach me.",
+      "The things I learn from mistakes often stay in my heart longer.",
+      "When I make a mistake I speak to myself kindly like a good friend.",
+      "Even the greatest sailors once drifted off course before learning how to steer.",
+      "If I keep learning no mistake is ever wasted but becomes part of my wisdom."
     ],
     ko:[
-      "실수는 실패의 신호가 아니라, 내가 배우고 있다는 신호야.",
-      "넘어질 때마다 나는 다시 일어서는 새로운 방법을 알게 돼.",
-      "왜 틀렸을까 대신, 이 실수가 나에게 무엇을 알려주려는 걸까라고 생각해봐.",
-      "완벽한 성공보다 실수에서 얻은 깨달음이 더 오래 마음에 남아.",
-      "실수했을 때, 친구를 위로하듯 친절하게 나에게 말해봐.",
-      "가장 뛰어난 선원들도 처음엔 방향을 잃고 표류했어.",
+      "실수는 실패의 신호가 아니라, 내가 계속 배우고 있다고 알려주는거야.",
+      "넘어질 때마다 다시 일어서는 새로운 방법을 알게 돼.",
+      "왜 틀렸을까 대신, 이 실수가 나에게 무엇을 알려주려는 걸까라고 물어봐.",
+      "실수에서 얻은 깨달음이 완벽한 성공보다 더 오래 마음에 남아.",
+      "실수했을 때 친구를 위로하듯 친절하게 나에게 말해봐.",
+      "가장 뛰어난 선원들도 처음엔 방향을 잃고 표류했었어.",
       "배움을 멈추지 않는다면 어떤 실수도 내 지혜의 일부가 될 거야."
     ],
-    wisdom:"길을 잘못 들 때마다 나침반은 새로운 지혜를 배운다.",
-    wisdomAttr:"선원의 격언"
+    wisdomEn:"\"Every wrong turn is how the sailor learns to trust the compass.\"",
+    wisdomKo:"\"길을 잘못 들 때마다 선원은 나침반을 어떻게 신뢰할지를 배운다.\"",
+    wisdomAttr:"Sailor\'s Wisdom · 선원의 지혜"
   },
   {
-    id:"2-6", title:"Chapter 2-6. Fear as a Friend",
+    id:"2-6",
+    title:"Chapter 2-6. Fear As a Friend",
     titleKo:"2-6장. 두려움을 친구로",
     en:[
-      "Fear is not here to stop me — it is a sign I am stepping into something new.",
-      "When I treat fear as a friend, I can accept it and bravely move forward.",
-      "Courage is not the absence of fear — it is holding fear's hand and moving forward.",
-      "The next time fear whispers what if you fail, I will reply what if I succeed.",
-      "I welcome fear as a sign that I am growing.",
-      "I imagine myself doing something truly wonderful, even when I am afraid.",
-      "Fear and I walk together, and together we discover what I am capable of."
+      "Fear is not here to stop me but a sign that I am stepping into something new.",
+      "When I treat fear as a friend I can accept it and bravely speak to it.",
+      "Courage is not the absence of fear but holding fear's hand and moving forward.",
+      "The next time fear whispers what if you fail I gently reply what if I succeed.",
+      "I welcome fear as a friend and imagine myself doing something truly wonderful.",
+      "Fear and courage walk together on my journey.",
+      "Every time I face fear I discover what I am truly capable of."
     ],
     ko:[
-      "두려움은 나를 멈추려는 게 아니라, 새로운 무언가로 나아가고 있다는 신호야.",
-      "두려움을 친구로 대할 때, 나는 그것을 받아들이고 용기 내어 나아갈 수 있어.",
-      "용기란 두려움이 없는 상태가 아니라, 두려움의 손을 잡고 앞으로 가는 거야.",
-      "두려움이 만약 네가 실패하면 어쩌지라고 속삭이면, 만약 내가 잘 해낸다면이라고 답할 거야.",
-      "두려움을 성장의 신호로 기꺼이 맞이할 거야.",
-      "두려워도 내가 멋지게 해내는 모습을 즐겁게 상상해봐.",
-      "두려움과 나는 함께 걸으며, 내가 무엇을 할 수 있는지 함께 발견해."
+      "두려움은 나를 멈추게 하려는 게 아니라, 새로운 무언가로 나아가고 있다는 신호야.",
+      "두려움을 친구로 대할 때, 있는 그대로 받아들이고 용기 내어 대화할 수 있어.",
+      "용기란 두려움이 없는 상태가 아니라, 두려움의 손을 잡고 앞으로 나아가는 거야.",
+      "두려움이 만약 실패하면 어쩌지라고 속삭이면, 만약 내가 잘 해낸다면이라고 답할게.",
+      "두려움이라는 친구를 따뜻하게 맞이하고 내가 멋지게 해내는 모습을 상상해봐.",
+      "두려움과 용기는 내 여정에서 함께 걸어가.",
+      "두려움을 마주할 때마다 내가 무엇을 할 수 있는지 발견하게 돼."
     ],
-    wisdom:"항구에 있는 배는 안전하다. 하지만 배는 그런 용도로 만들어진 것이 아니다.",
-    wisdomAttr:"존 A. 셰드"
+    wisdomEn:"\"A ship in harbor is safe, but that\'s not what ships are built for.\"",
+    wisdomKo:"\"항구에 있는 배는 안전하다. 하지만 배는 그런 용도로 만들어진 것이 아니다.\"",
+    wisdomAttr:"John A. Shedd · 존 A. 셰드"
   },
   {
-    id:"2-7", title:"Chapter 2-7. The Courage to Ask for Help",
+    id:"2-7",
+    title:"Chapter 2-7. The Courage to Ask for Help",
     titleKo:"2-7장. 도움을 구하는 용기",
     en:[
-      "Asking for help does not make me weak — it shows I am brave enough to be honest.",
-      "No one crosses the ocean alone, and no one grows alone in life.",
-      "Sometimes the bravest words I can say are: I need your hand.",
-      "When I open my hand, I give others the chance to share kindness with me.",
-      "Even the strongest ship needs the wind, the waves, and the crew.",
-      "Asking for help is not shameful — it is proof that we are connected.",
+      "Asking for help does not make me weak, it means I am brave enough to be honest.",
+      "No one crosses the ocean alone and no one grows alone in life.",
+      "Sometimes the bravest words are I need your hand.",
+      "When I open my hand I also open the door for others to share their kindness.",
+      "Even the strongest ship needs the wind the wave and the crew to move forward.",
+      "Asking for help is proof that we are connected to one another.",
       "True courage is knowing when to hold someone's hand."
     ],
     ko:[
-      "도움을 요청하는 건 약한 게 아니라 솔직할 수 있는 용기야.",
+      "도움을 요청하는 건 약해지는 것이 아니라 솔직할 수 있는 용기야.",
       "넓은 바다를 혼자 건널 수 없듯, 인생도 혼자만의 힘으로는 성장할 수 없어.",
       "가끔 가장 용감한 말은 너의 도움이 필요해라고 말하는 거야.",
-      "내 손을 내밀면, 다른 사람들이 친절을 베풀 수 있는 기회를 주는 거야.",
+      "손을 내밀면, 다른 사람들에게 친절을 베풀 수 있는 기회를 주는 거야.",
       "세상에서 가장 큰 배도 바람과 파도, 그리고 선원이 있어야 나아갈 수 있어.",
-      "도움을 구하는 건 부끄러운 일이 아니라 우리가 연결되어 있다는 증거야.",
+      "도움을 구하는 건 우리가 서로 연결되어 있다는 증거야.",
       "진짜 용기는 누군가의 손을 잡을 줄 아는 마음이야."
     ],
-    wisdom:"가장 강한 배도 함께하는 선원이 필요하다.",
-    wisdomAttr:"선원의 격언"
+    wisdomEn:"\"Even the strongest ship needs a crew.\"",
+    wisdomKo:"\"가장 강한 배도 함께하는 선원이 필요하다.\"",
+    wisdomAttr:"Sailor\'s Wisdom · 선원의 지혜"
   },
   {
-    id:"2-8", title:"Chapter 2-8. When You Lost Direction",
+    id:"2-8",
+    title:"Chapter 2-8. When You Lost Direction",
     titleKo:"2-8장. 방향을 잃었을 때",
     en:[
-      "When I feel lost, I pause and look back at how far I have already come.",
-      "I will see the countless steps that have brought me to where I am now.",
-      "When I feel uncertain, I remember moments of pride and accomplishment.",
-      "Losing direction is not failure — it is simply searching for a new path.",
-      "What matters most is not the speed, but the courage to move forward once more.",
-      "Even in the dark, my inner compass is always there to guide me.",
-      "Every time I find my way again, I become a little stronger."
+      "When I feel lost I pause and look back at how far I have already come.",
+      "I will realize the countless steps that have brought me here.",
+      "When I feel uncertain I picture reaching my dad's hand for a high five.",
+      "Those moments of pride and accomplishment give me positive energy.",
+      "Losing direction is not failure but a sign that I am searching for a new path.",
+      "What matters most is not the speed but the courage to move forward once more.",
+      "Every time I find my way again I become a little stronger."
     ],
     ko:[
       "방향을 잃었을 때는 잠시 멈추어 지금까지 걸어온 길을 돌아봐.",
       "분명히 여기 오기까지 수많은 걸음을 걸어왔음을 깨닫게 될 거야.",
-      "마음이 흔들릴 때, 자랑스럽고 뿌듯했던 성취의 순간들을 떠올려봐.",
+      "마음이 흔들릴 때, 아빠의 손에 하이파이브를 하려던 그 순간을 떠올려봐.",
+      "자랑스럽고 뿌듯했던 성취의 순간들이 긍정적인 에너지를 줘.",
       "방향을 잃는 것은 실패가 아니라, 새로운 길을 찾고 있다는 신호야.",
       "가장 중요한 것은 속도가 아니라, 다시 나아가려는 용기야.",
-      "별이 보이지 않을 때도 내 마음속 나침반은 늘 거기 있어.",
       "다시 길을 찾을 때마다 나는 조금 더 강해져."
     ],
-    wisdom:"별이 보이지 않을 때, 가장 현명한 선장은 내면의 나침반을 따른다.",
-    wisdomAttr:"선원의 격언"
+    wisdomEn:"\"When the stars are not visible, the wisest captain follows the inner compass.\"",
+    wisdomKo:"\"별이 보이지 않을 때, 가장 현명한 선장은 내면의 나침반을 따른다.\"",
+    wisdomAttr:"Sailor\'s Wisdom · 선원의 지혜"
   },
   {
-    id:"2-9", title:"Chapter 2-9. Trying Something New",
+    id:"2-9",
+    title:"Chapter 2-9. Trying Something New",
     titleKo:"2-9장. 새로운 시도",
     en:[
       "Trying something new may feel exciting and a little scary at the same time.",
       "Each new step can reveal a path I never noticed before.",
       "Opportunities find the people who are ready.",
-      "When I prepare, learn, and stay curious, I become someone life can trust.",
+      "When I prepare learn and stay curious I become someone life can trust.",
       "I am not afraid to explore something unfamiliar.",
       "My courage may lead me somewhere amazing.",
-      "When a chance finally comes, I will take it with confidence."
+      "When a chance finally comes I take it with confidence."
     ],
     ko:[
-      "새로운 것을 시도한다는 것은 설레면서도 조금 두려울 수 있어.",
-      "한 걸음씩 내딛을 때마다 전에는 몰랐던 길을 발견하게 될 거야.",
+      "새로운 것을 시도하는 건 설레면서도 조금 두려울 수 있어.",
+      "한 걸음씩 내딛을 때마다 전에는 몰랐던 길을 발견하게 돼.",
       "기회는 준비된 사람에게 찾아와.",
       "내가 준비하고 배우며 호기심을 잃지 않을 때, 인생은 나에게 새로운 기회를 줄 수 있어.",
       "낯선 것을 탐험하는 것을 두려워하지 않을 거야.",
       "나의 용기가 나를 놀라운 곳으로 이끌어 줄지도 몰라.",
       "마침내 기회가 찾아왔을 때, 자신감을 가지고 그 기회를 잡을 거야."
     ],
-    wisdom:"해안을 떠날 용기가 없다면, 결코 새로운 바다를 발견할 수 없을 것이다.",
-    wisdomAttr:"선원의 격언"
+    wisdomEn:"\"You\'ll never discover new oceans unless you dare to leave the shore.\"",
+    wisdomKo:"\"해안을 떠날 용기가 없다면, 결코 새로운 바다를 발견할 수 없을 것이다.\"",
+    wisdomAttr:"Sailor\'s Wisdom · 선원의 지혜"
   },
   {
-    id:"2-10", title:"Chapter 2-10. At Your Own Pace",
+    id:"2-10",
+    title:"Chapter 2-10. At Your Own Pace",
     titleKo:"2-10장. 자신만의 속도로",
     en:[
-      "Life is not a race — I do not need to move at the same speed as everyone else.",
-      "Some days my steps will be slow, and other days I feel ready to move faster.",
-      "What truly matters is not how quickly I grow, but how sincerely I change.",
-      "When I compare myself to others, I may overlook my own quiet progress.",
-      "When I pay attention to my own rhythm, I notice small shifts that make me stronger.",
-      "My pace belongs to me, and it does not have to match anyone else's.",
-      "The most meaningful growth begins quietly, at my very own pace."
+      "Life is not a race and I do not need to move at the same speed as everyone else.",
+      "Some days my steps are slow and other days I feel ready to move faster.",
+      "What truly matters is not how quickly I grow but how sincerely I change.",
+      "When I compare myself to others I may overlook the quiet progress within me.",
+      "When I pay attention to my own rhythm I notice small shifts that make me stronger.",
+      "My pace belongs to me and it does not have to match anyone else's.",
+      "The most meaningful growth begins quietly at my very own pace."
     ],
     ko:[
       "인생은 경주가 아니기 때문에 다른 사람들과 같은 속도로 갈 필요가 없어.",
@@ -630,44 +777,48 @@ const CHAPTERS = [
       "나의 속도는 나만의 것이야. 다른 누구와도 비교할 필요가 없어.",
       "가장 의미있는 성장은 늘 조용하게, 나만의 속도로 시작돼."
     ],
-    wisdom:"배는 다른 배의 속도를 따라갈 필요가 없다. 그저 자기 항로를 지키면 된다.",
-    wisdomAttr:"선원의 격언"
+    wisdomEn:"\"A ship does not need to match the speed of others; it only needs to stay true to its own course.\"",
+    wisdomKo:"\"배는 다른 배의 속도를 따라갈 필요가 없다. 그저 자기 항로를 지키면 된다.\"",
+    wisdomAttr:"Sailor\'s Wisdom · 선원의 지혜"
   },
   {
-    id:"3-1", title:"Chapter 3-1. When the Wind Blows",
+    id:"3-1",
+    title:"Chapter 3-1. When the Wind Blows",
     titleKo:"3-1장. 바람이 불어올 때",
     en:[
       "Sometimes life brings winds I cannot control.",
-      "Instead of fighting the wind, I learn to understand the way it moves.",
+      "Instead of fighting the wind I learn to understand the way it moves.",
       "Every wind carries a message about where life wants me to grow.",
-      "When I open my heart to it, I begin to move with life, not against it.",
+      "When I open my heart to it I begin to move with life not against it.",
       "Even unexpected winds can guide me to places I never imagined.",
       "I trust that the wind arrives at the moment I need it most.",
-      "The wind is not my enemy — it is my teacher."
+      "The wind is not my enemy but my teacher."
     ],
     ko:[
       "가끔 우리 삶에는 우리가 조절할 수 없는 바람이 불어오기도 해.",
-      "그 바람과 맞서 싸우기보다는, 그 바람이 움직이는 방식을 이해하려고 해봐.",
-      "모든 바람은 삶이 나를 어디로 이끌어 성장시키고 싶은지에 대한 메시지를 담고 있어.",
+      "그 바람과 맞서 싸우기보다는 그 바람이 움직이는 방식을 이해하려고 해봐.",
+      "모든 바람은 삶이 나를 어디로 이끌어 성장시키고 싶은지의 메시지를 담고 있어.",
       "마음을 열고 바람을 받아들이면, 삶과 함께 움직이기 시작할 거야.",
-      "예상치 못한 바람조차도 내가 한 번도 상상해 본 적 없는 멋진 곳으로 이끌어 줄 수 있어.",
+      "예상치 못한 바람조차도 내가 상상해 본 적 없는 멋진 곳으로 이끌어 줄 수 있어.",
       "내게 가장 필요한 순간에 바람이 불어온다는 것을 믿어봐.",
-      "바람은 나의 적이 아니야. 그것은 나의 스승이야."
+      "바람은 나의 적이 아니라 나의 스승이야."
     ],
-    wisdom:"바람과 파도는 항상 가장 뛰어난 항해사의 편에 있다.",
-    wisdomAttr:"선원의 격언"
+    wisdomEn:"\"The wind and waves are always on the side of the ablest navigator.\"",
+    wisdomKo:"\"바람과 파도는 항상 가장 뛰어난 항해사의 편에 있다.\"",
+    wisdomAttr:"Sailor\'s Wisdom · 선원의 지혜"
   },
   {
-    id:"3-2", title:"Chapter 3-2. Setting Your Own Course",
+    id:"3-2",
+    title:"Chapter 3-2. Setting Your Own Course",
     titleKo:"3-2장. 자신만의 방향 정하기",
     en:[
-      "Life gives me many winds, but only I decide where to set my sail.",
-      "I may not control everything, but I always control my direction.",
+      "Life gives me many winds but only I decide where to set my sail.",
+      "I may not control everything but I always control my direction.",
       "Every choice I make is like adjusting my compass a little at a time.",
-      "When I choose my path with honesty, my journey becomes truly mine.",
-      "Others may try to steer me, but my heart knows the truest course.",
-      "I lead my life gently but boldly, following what feels right for me.",
-      "My path is special and unique, just as I am one of a kind."
+      "When I choose my path with honesty my journey becomes truly mine.",
+      "Others may try to steer me but my heart knows the truest course.",
+      "I lead my life gently but boldly following what feels right for me.",
+      "My path is special and unique just as I am one of a kind."
     ],
     ko:[
       "인생은 나에게 많은 바람을 주지만, 돛을 어떻게 펼칠지는 내가 선택하는 거야.",
@@ -676,20 +827,22 @@ const CHAPTERS = [
       "진심에 따라 선택할 때, 나의 여정은 비로소 나만의 것이 돼.",
       "사람들이 나를 이끌려고 해도, 내 마음이 아는 길이 가장 진실한 길이야.",
       "부드럽지만 당당하게, 내가 옳다고 느끼는 길을 따라 내 인생을 이끌어 갈 거야.",
-      "나가 가는 길은 특별하고 유일해, 내가 하나뿐인 존재이듯이."
+      "내가 가는 길은 특별하고 유일해, 내가 하나뿐인 존재이듯이."
     ],
-    wisdom:"우리는 바람을 바꿀 수 없지만, 돛은 조정할 수 있다.",
-    wisdomAttr:"선원의 격언"
+    wisdomEn:"\"Every sailor must choose his own heading, for no two voyages are the same.\"",
+    wisdomKo:"\"인생이라는 항해에 같은 길은 없다. 누구나 자신만의 항로를 찾아야 한다.\"",
+    wisdomAttr:"Sailor\'s Wisdom · 선원의 지혜"
   },
   {
-    id:"3-3", title:"Chapter 3-3. The People We Meet by Chance",
+    id:"3-3",
+    title:"Chapter 3-3. The People We Meet by Chance",
     titleKo:"3-3장. 우연처럼 찾아오는 인연",
     en:[
       "Sometimes people appear in my life like waves touching the shore.",
-      "Some will stay, some will pass, and both are meaningful in their own way.",
+      "Some will stay some will pass and both are meaningful in their own way.",
       "Chance meetings often hold quiet lessons that guide my growth.",
       "The people I meet can show me who I am and who I am becoming.",
-      "I treat every connection with kindness, because each one opens a new direction.",
+      "I treat every connection with kindness because each one opens a new direction.",
       "Life often sends the right person at the right moment.",
       "Every person I meet leaves a quiet mark on my story."
     ],
@@ -697,169 +850,183 @@ const CHAPTERS = [
       "때로 사람들은 해변에 닿는 파도처럼 내 삶에 들어와.",
       "어떤 사람은 머무르고, 어떤 사람은 스쳐 지나가지만, 그 모두가 소중한 의미가 있어.",
       "우연처럼 보이는 만남에도 나를 성장하게 하는 소중한 교훈이 담겨 있어.",
-      "사람들은 내가 누구인지, 어떤 사람이 되어가는지를 비춰주는 거울이 될 수 있어.",
+      "사람들은 내가 누구인지, 어떤 사람이 되어가는지를 비춰주는 거울이 돼.",
       "모든 만남을 소중하게 대해. 그 만남 하나하나가 새로운 길을 열어주니까.",
       "인생은 종종 가장 필요한 순간에 꼭 필요한 사람을 보내줘.",
       "내가 만나는 모든 사람은 내 이야기에 조용한 흔적을 남겨."
     ],
-    wisdom:"우리는 모두 다른 배를 타고 왔을지 모르지만, 지금은 같은 배에 타고 있다.",
-    wisdomAttr:"마틴 루터 킹 주니어"
+    wisdomEn:"\"We may have all come on different ships, but we\'re in the same boat now.\"",
+    wisdomKo:"\"우리는 모두 다른 배를 타고 왔을지 모르지만, 지금은 같은 배에 타고 있다.\"",
+    wisdomAttr:"Martin Luther King Jr. · 마틴 루터 킹 주니어"
   },
   {
-    id:"3-4", title:"Chapter 3-4. The Path You See When You Pause",
+    id:"3-4",
+    title:"Chapter 3-4. The Path You See When You Pause",
     titleKo:"3-4장. 멈춰야 보이는 길",
     en:[
-      "Moving forward is important, but pausing is just as powerful.",
-      "When I stop for a moment, the noise around me settles and clarity appears.",
+      "Moving forward is important but pausing is just as powerful.",
+      "When I stop for a moment the noise around me settles and clarity appears.",
       "A pause is the space where my heart finally speaks.",
-      "It gives me time to see what I missed while rushing.",
-      "Resting does not make me lose time — it helps me see with new vision.",
-      "Sometimes the very moment I pause becomes the starting point that moves me forward.",
-      "In the quiet, I find the answers I have been looking for."
+      "Resting does not make me lose time but helps me see with new vision.",
+      "Sometimes the moment I pause becomes the starting point that moves me forward.",
+      "In the quiet I find the answers I have been looking for.",
+      "Stillness is not emptiness but a place where new paths become visible."
     ],
     ko:[
       "앞으로 나아가는 것도 중요하지만, 잠시 멈추는 것 역시 큰 힘을 가지고 있어.",
       "잠시 걸음을 멈추면 주변 소음이 가라앉고 맑은 생각이 떠올라.",
       "멈춤은 내 마음이 나에게 말을 걸어올 수 있는 공간이 돼.",
-      "바쁘게 서두르느라 미처 보지 못했던 것들을 바라볼 시간을 줘.",
       "쉬어간다고 해서 시간을 잃는 게 아니야. 오히려 더 깊은 통찰을 얻게 돼.",
       "때로는 멈춰 서는 그 순간이 다시 앞으로 나아가게 해주는 지점이 돼.",
-      "고요함 속에서 나는 찾고 있던 답들을 발견해."
+      "고요함 속에서 나는 찾고 있던 답들을 발견해.",
+      "고요함은 비어있는 것이 아니라 새로운 길이 보이는 곳이야."
     ],
-    wisdom:"바다가 고요할 때 비로소 별이 보인다.",
-    wisdomAttr:"선원의 격언"
+    wisdomEn:"\"Calm seas reveal the stars.\"",
+    wisdomKo:"\"바다가 고요할 때 비로소 나아갈 길이 잘 보인다.\"",
+    wisdomAttr:"Sailor\'s Wisdom · 선원의 지혜"
   },
   {
-    id:"3-5", title:"Chapter 3-5. The Moment of Choice",
+    id:"3-5",
+    title:"Chapter 3-5. The Moment of Choice",
     titleKo:"3-5장. 선택의 순간",
     en:[
-      "Every day, small choices quietly shape my life.",
+      "Every day small choices quietly shape my life.",
       "Even tiny decisions can lead me toward a future I cannot yet see.",
       "Choosing can feel scary because it means stepping into the unknown.",
       "Courage grows each time I listen to my heart.",
       "My choices are the seeds of my tomorrow.",
-      "When I choose with care, I plant a future full of possibility.",
+      "When I choose with care I plant a future full of possibility.",
       "One honest choice has the power to change everything."
     ],
     ko:[
       "매일의 작은 선택들이 조용히 나의 삶을 만들어가고 있어.",
       "아주 사소한 결정 하나도 내가 아직 보지 못하는 미래로 나를 이끌 수 있어.",
       "선택은 때때로 무서울 수 있어. 알 수 없는 세상에 발을 내딛는 일이니까.",
-      "내 마음의 소리에 귀 기울일 때마다 용기는 자라나.",
+      "마음의 소리에 귀 기울일 때마다 용기가 자라나.",
       "나의 모든 선택은 내일을 위한 소중한 씨앗이 돼.",
       "신중하게 선택할 때, 나는 가능성으로 가득한 미래의 씨앗을 심게 돼.",
       "진심에서 나온 단 하나의 선택이 모든 것을 바꿀 수 있어."
     ],
-    wisdom:"방향키가 없다면, 어떠한 바람도 배를 원하는 방향으로 이끌 수 없다.",
-    wisdomAttr:"선원의 격언"
+    wisdomEn:"\"Without a rudder, no wind can guide the ship to its desired direction.\"",
+    wisdomKo:"\"방향키가 없다면, 어떠한 바람도 배를 원하는 방향으로 이끌 수 없다.\"",
+    wisdomAttr:"Sailor\'s Wisdom · 선원의 지혜"
   },
   {
-    id:"3-6", title:"Chapter 3-6. Dancing with the Waves",
+    id:"3-6",
+    title:"Chapter 3-6. Dancing with the Waves",
     titleKo:"3-6장. 파도와 함께 춤추기",
     en:[
-      "Life's waves will rise and fall, just like my emotions and challenges.",
-      "Instead of fearing them, I learn to move with their rhythm.",
-      "Every wave teaches me balance, patience, and strength.",
-      "When I stand firm through the waves, I discover my resilience.",
-      "Change does not come to make me fall — it shapes me into someone stronger.",
+      "Life's waves rise and fall just like my emotions and challenges.",
+      "Instead of fearing them I learn to move with their rhythm.",
+      "Every wave teaches me balance patience and strength.",
+      "When I stand firm through the waves I discover my resilience.",
+      "Change does not come to break me but to make me stronger.",
       "I learn to dance with a heart that knows how to enjoy itself.",
-      "In that dance, with my own rhythm, I become stronger than the waves."
+      "In that dance with my own rhythm I become stronger than the waves."
     ],
     ko:[
       "인생의 파도는 내가 살아가면서 맞이하게 될 감정이나 도전들처럼 오르락내리락 해.",
       "그 파도를 두려워하기보다는, 그 리듬에 맞춰 함께 움직이는 법을 배워봐.",
-      "파도 하나하나가 나에게 균형 잡기, 인내하기, 그리고 강해지는 법을 가르쳐 줄 거야.",
+      "파도 하나하나가 나에게 균형 잡기, 인내하기, 그리고 강해지는 법을 가르쳐줘.",
       "파도 속에서도 단단하게 서 있을 때, 내 안에 숨겨진 회복 탄력성을 발견하게 돼.",
       "변화는 나를 넘어뜨리기 위해 오는 게 아니라 더 강한 모습으로 성장시키기 위해 와.",
       "불확실함 가운데서도 스스로 즐길 줄 아는 마음으로 춤을 추는 법을 배울 거야.",
-      "그 춤 속에서 나만의 리듬으로, 나는 파도보다도 더 강하고 흔들리지 않는 사람이 돼."
+      "그 춤 속에서 나만의 리듬으로, 나는 파도보다도 더 강해져."
     ],
-    wisdom:"바다가 거칠수록, 항해사는 더 노련해진다.",
-    wisdomAttr:"선원의 격언"
+    wisdomEn:"\"The rougher the seas, the smoother the sailor.\"",
+    wisdomKo:"\"바다가 거칠수록, 항해사는 더 노련해진다.\"",
+    wisdomAttr:"Sailor\'s Wisdom · 선원의 지혜"
   },
   {
-    id:"3-7", title:"Chapter 3-7. Destiny and Free Will",
+    id:"3-7",
+    title:"Chapter 3-7. The Balance of Destiny and Free Will",
     titleKo:"3-7장. 운명과 자유의지의 균형",
     en:[
-      "Destiny is like the ocean I am born into — not one I choose.",
-      "But how I sail that sea is always my own choice.",
-      "I cannot stop the wind, yet I can decide where to point my sail.",
-      "Even when the waves feel strong, my hands still hold the wheel.",
+      "Destiny is like the ocean I am born into, not one I choose.",
+      "But how I sail that sea is always my own choice shaped by free will.",
+      "I cannot stop the wind yet I can decide where to point my sail.",
+      "Even when the waves feel strong my hands still hold the wheel.",
       "Every small choice quietly teaches my ship where to go next.",
-      "Little by little, those choices shape my own beautiful journey.",
-      "When I trust both the sea and my heart, I learn how to sail in balance."
+      "Little by little those choices shape my own beautiful journey.",
+      "When I trust both the sea and my heart I learn to sail in balance."
     ],
     ko:[
       "운명이란 내가 태어날 때부터 스스로 선택하지 않은 바다와 같아.",
-      "하지만 그 바다를 어떻게 항해할지는 언제나 나의 선택이야.",
+      "하지만 그 바다를 어떻게 항해할지는 언제나 자유의지로 정해진 나의 선택이야.",
       "바람을 멈출 수는 없어도, 돛을 어느 방향으로 향할지는 내가 정할 수 있어.",
       "파도가 거세게 느껴질 때도, 조종키를 잡은 손은 여전히 나의 것이야.",
       "작은 선택 하나하나가 조용히 나의 배가 갈 길을 가르쳐 줘.",
       "그 선택들이 쌓여 나만의 아름다운 항해가 만들어져.",
       "바다와 내 마음을 함께 믿을 때, 나는 균형 있게 항해하는 법을 배우게 돼."
     ],
-    wisdom:"운명이 지도를 그린다면, 그 위를 채우는 잉크는 당신의 손에 들려 있다.",
-    wisdomAttr:"선원의 격언"
+    wisdomEn:"\"The sea was not made for one heading alone. Every sailor finds their own true course.\"",
+    wisdomKo:"\"바다는 하나의 방향만을 위해 존재하지 않는다. 모든 선원은 결국 자신만의 진정한 항로를 찾아낸다.\"",
+    wisdomAttr:"Sailor\'s Wisdom · 선원의 지혜"
   },
   {
-    id:"3-8", title:"Chapter 3-8. Living a Future Already Begun",
+    id:"3-8",
+    title:"Chapter 3-8. Living a Future That Has Already Begun",
     titleKo:"3-8장. 이미 시작된 미래를 살아가기",
     en:[
-      "Time is not just the past, present, and future in a line — it is one whole story.",
-      "My future is not something far away — it has already begun within me.",
-      "When I imagine my future as already real, fear slowly turns into excitement.",
-      "The future no longer feels strange or scary when I live it from within.",
+      "Time is not just the past present and future in a line but one whole story.",
+      "My future is not something far away, it has already begun within me.",
+      "When I imagine my future as already real fear slowly turns into excitement.",
       "Each moment gently shows me the path my heart has already chosen.",
-      "In this way, I become the captain of my own life, not just a passenger.",
-      "The story of my future is being written right now, with every choice I make."
+      "In that way I become the captain of my own life not just a passenger.",
+      "My future story is being written right now with every choice I make.",
+      "I live today as if I am already the person I am becoming."
     ],
     ko:[
       "시간은 과거, 현재, 미래가 한 줄로 이어진 것만이 아니야. 시간은 하나의 전체 이야기야.",
       "내 미래는 멀리 있는 것이 아니라, 이미 내 안에서 시작되었어.",
       "미래를 이미 이루어진 것처럼 떠올리면 두려움은 설렘으로 바뀌어.",
-      "미래를 내 안에서 살아갈 때, 그것은 더 이상 낯설거나 무섭지 않아.",
       "매 순간은 내 마음이 이미 선택한 길을 조용히 보여줘.",
       "이런 의미에서 나는 단지 승객이 아니라, 내 삶의 선장이 돼.",
-      "내 미래의 이야기는 지금 이 순간, 내가 하는 모든 선택으로 써지고 있어."
+      "내 미래의 이야기는 지금 이 순간, 내가 하는 모든 선택으로 써지고 있어.",
+      "나는 오늘을 이미 내가 되어가고 있는 사람처럼 살아가."
     ],
-    wisdom:"돛을 올리기 전부터 항로는 이미 정해져 있었다.",
-    wisdomAttr:"선원의 격언"
+    wisdomEn:"\"A sailor who can see tomorrow\'s winds sets sail today.\"",
+    wisdomKo:"\"내일의 바람을 볼 수 있는 선원은 앞서 오늘 항해를 시작한다.\"",
+    wisdomAttr:"Sailor\'s Wisdom · 선원의 지혜"
   },
   {
-    id:"3-9", title:"Chapter 3-9. The Compass Within",
+    id:"3-9",
+    title:"Chapter 3-9. The Compass Within",
     titleKo:"3-9장. 네 마음속의 나침반",
     en:[
-      "Whenever I feel unsure, I remember that the answers are already inside me.",
-      "There is a quiet compass in my heart that gently points the way.",
-      "When the world becomes noisy, my inner compass guides me gently.",
+      "Whenever I feel unsure, the answers are already inside me.",
+      "There is a quiet compass in my heart that gently points the way I need to go.",
+      "When the world becomes noisy my inner compass guides me gently.",
       "It always points toward what feels honest and true.",
-      "It may not shout, but it always speaks with truth and care.",
-      "Each time I follow my inner compass, my path becomes clearer and steadier.",
+      "It may not shout but it always speaks with truth and care.",
+      "Each time I follow my inner compass my path becomes clearer and steadier.",
       "My greatest guide in life lives within my own heart."
     ],
     ko:[
-      "뭔가 확신이 없을 때마다 내 안에 이미 모든 답이 들어있다는 것을 기억해.",
+      "뭔가 확신이 없을 때마다 내 안에 이미 모든 답이 들어있다는 걸 기억해.",
       "내 마음속에는 내가 가야 할 길을 조용히 알려주는 작은 나침반이 있어.",
-      "세상이 소란스러울 때도, 이 내면의 나침반은 나를 다정하게 안내해 줄 거야.",
+      "세상이 소란스러울 때도, 이 내면의 나침반은 나를 다정하게 안내해줄 거야.",
       "이 나침반은 언제나 나의 솔직하고 진실한 모습을 향해 있어.",
       "큰 소리로 외치지 않지만, 늘 진심 어린 목소리로 내게 속삭여 줘.",
       "이 나침반을 믿고 따라갈 때마다, 내가 걷는 길은 더욱 선명해지고 단단해져.",
       "인생에서 가장 훌륭한 길잡이는 바로 내 마음속에 살고 있어."
     ],
-    wisdom:"항해사에게 진짜 길잡이가 되어주는 것은 지도가 아니라, 그가 믿고 의지하는 나침반이다.",
-    wisdomAttr:"선원의 격언"
+    wisdomEn:"\"A sailor\'s true guide is not the map, but the compass he trusts.\"",
+    wisdomKo:"\"항해사에게 진짜 길잡이가 되어주는 것은 지도가 아니라, 그가 믿고 의지하는 나침반이다.\"",
+    wisdomAttr:"Sailor\'s Wisdom · 선원의 지혜"
   },
   {
-    id:"3-10", title:"Chapter 3-10. Your Own Voyage",
+    id:"3-10",
+    title:"Chapter 3-10. Your Own Voyage",
     titleKo:"3-10장. 너만의 항해",
     en:[
       "No one else can live my life for me.",
-      "The ocean I sail is mine alone — full of choices, storms, and amazing discoveries.",
+      "The ocean I sail is mine alone filled with choices storms and amazing discoveries.",
       "I will meet winds that push me forward and waves that slow me down.",
       "Every moment becomes part of my unique voyage.",
       "I am both the captain and the storyteller of my journey.",
-      "I live my life with courage, curiosity, and an open heart.",
-      "My voyage is mine to create, one day at a time."
+      "I live my life with courage curiosity and an open heart.",
+      "My voyage is mine to create one day at a time."
     ],
     ko:[
       "어느 누구도 나의 삶을 대신 살아줄 수는 없어.",
@@ -870,47 +1037,51 @@ const CHAPTERS = [
       "용기와 호기심을 갖고, 마음을 활짝 열고 나의 삶을 살아갈 거야.",
       "나의 항해는 매일매일 내가 직접 만들어가는 거야."
     ],
-    wisdom:"배의 항로를 결정하는 것은 바다가 아니라 항해사다.",
-    wisdomAttr:"선원의 격언"
+    wisdomEn:"\"A ship\'s course is shaped not by the sea, but by the sailor.\"",
+    wisdomKo:"\"배의 항로를 결정하는 것은 바다가 아니라 항해사다.\"",
+    wisdomAttr:"Sailor\'s Wisdom · 선원의 지혜"
   },
   {
-    id:"4-1", title:"Chapter 4-1. Time is Not Money but Life",
+    id:"4-1",
+    title:"Chapter 4-1. Time is Not Money But Life",
     titleKo:"4-1장. 시간은 돈이 아니라 생명이다",
     en:[
-      "Time is not just money — time is life itself.",
-      "You can earn back lost money, but once time passes, it never returns.",
-      "To be alive means I am breathing through the moments of time I am given.",
-      "Time is not something to just save, but to be respected and felt deeply.",
-      "Every hour I spend becomes a part of my one and only life.",
+      "Time is not just money, time is life itself.",
+      "You can earn back lost money but once time passes it never returns.",
+      "Being alive means breathing through the moments of time we are given.",
+      "Time is not just something to save but to be respected and felt deeply.",
+      "The hours I spend today gather together to become my own precious life.",
       "I will not let a single precious moment pass without intention.",
-      "The hours I spend today gather together to become my precious life."
+      "I remember that my time is the most valuable resource I have."
     ],
     ko:[
       "시간은 단순히 돈이 아니야. 시간은 곧 생명이야.",
       "돈은 잃어도 다시 벌 수 있지만, 한 번 지나간 시간은 다시 돌아오지 않아.",
-      "우리가 살아 있다는 것은 지금 이 순간의 시간을 쓰고 있다는 뜻이야.",
+      "우리가 살아 있다는 것은 우리에게 주어진 시간의 순간들을 숨쉬며 사는 것이야.",
       "시간은 단순히 아끼는 대상이 아니라, 존중하고 느끼며 살아야 할 생명과도 같아.",
-      "내가 보내는 모든 시간은 나의 하나뿐인 삶의 일부가 돼.",
+      "오늘 내가 보내는 이 시간들이 모여, 나만의 소중한 인생이 돼.",
       "소중한 한 순간도 의도 없이 지나가게 두지 않을 거야.",
-      "오늘 내가 보내는 이 시간들이 모여, 나만의 소중한 인생이 돼."
+      "나의 시간이 내가 가진 가장 소중한 자원임을 잊지 않을게."
     ],
-    wisdom:"잃어버린 시간은 이미 떠나버린 배와 같아서, 다시는 부두로 되돌릴 수 없다.",
-    wisdomAttr:"항해의 격언"
+    wisdomEn:"\"Lost time is like a ship that has already sailed; it can never be brought back to the dock.\"",
+    wisdomKo:"\"잃어버린 시간은 이미 떠나버린 배와 같아서, 다시는 부두로 되돌릴 수 없다.\"",
+    wisdomAttr:"Sailor\'s Wisdom · 선원의 지혜"
   },
   {
-    id:"4-2", title:"Chapter 4-2. When You Put a Price on Time",
+    id:"4-2",
+    title:"Chapter 4-2. When You Put a Price on Time",
     titleKo:"4-2장. 시간을 돈으로 환산하게 되면",
     en:[
-      "When I see time as money, I begin to notice where my life is actually going.",
-      "Wasting an hour of my time is like giving away hard-earned value for free.",
-      "Scrolling without purpose is paying with my future time in advance.",
-      "When I read, learn, or care for my body, that same hour grows into something bigger.",
-      "Time spent on health and learning comes back to me with interest.",
+      "When I see time as money I begin to notice where my life is actually going.",
+      "Wasting an hour is like giving away my hard-earned value for free.",
+      "Scrolling through my phone without purpose is spending future time in advance.",
+      "When I read learn or care for my body that same hour grows into something bigger.",
+      "Time spent on health and learning comes back with interest.",
       "Time given to people I love becomes wealth that cannot be measured.",
       "How I spend my time shows how much I value my own life."
     ],
     ko:[
-      "시간을 돈으로 바라보기 시작하면 내 삶이 실제 어디로 가고 있는지 보여.",
+      "시간을 돈으로 바라보기 시작하면 내 삶이 실제 어디로 가고 있는지가 보여.",
       "허투로 낭비한 한 시간은, 내가 가진 소중한 가치를 공짜로 내어준 것과 같아.",
       "목적 없이 스마트폰 화면을 넘기고 있다면 미래의 시간을 미리 지불하고 있는 거야.",
       "읽고 배우고 몸을 돌보는 시간은 나중에 더 큰 가치로 돌아와.",
@@ -918,92 +1089,100 @@ const CHAPTERS = [
       "사랑하는 사람에게 쏟은 시간은 돈으로 매길 수 없는 자산이 돼.",
       "시간을 어떻게 쓰는지는, 내가 내 삶을 얼마나 소중히 여기는지를 보여줘."
     ],
-    wisdom:"현명한 선원은 속도가 아니라, 바다 위에 있는 시간을 센다.",
-    wisdomAttr:"선원의 격언"
+    wisdomEn:"\"A wise sailor knows not just how fast he sails, but how well he uses every hour at sea.\"",
+    wisdomKo:"\"현명한 선원은 항해의 속도보다는 바다 위의 매 시간을 얼마나 잘 보내는지를 안다.\"",
+    wisdomAttr:"Sailor\'s Wisdom · 선원의 지혜"
   },
   {
-    id:"4-3", title:"Chapter 4-3. Time is a Precious Gift",
+    id:"4-3",
+    title:"Chapter 4-3. Time is a Precious Gift",
     titleKo:"4-3장. 시간은 소중한 선물",
     en:[
-      "Time is like a magic seed — if I plant it well, it grows into a big tree.",
+      "Time is like a magic seed, if I plant it well it grows into a big tree.",
       "Spending time on learning is like putting gold in my heart's piggy bank.",
-      "I will not throw my time away — I will use it to make my dreams come true.",
-      "Reading a book today is like planting a seed in the wonderful power of my brain.",
+      "Every book I read plants a seed that helps my mind grow.",
       "Little efforts every day make a giant leap in my future.",
       "Doing something valuable for myself is the best way to use my time.",
-      "I am kind to my future self by using my time wisely today."
+      "I am kind to my future self by using my time wisely today.",
+      "Today's time, used well, becomes tomorrow's strength."
     ],
     ko:[
       "시간은 마법 씨앗과 같아. 잘 심으면 커다란 나무로 자라나.",
       "무언가를 배우는 데 시간을 쓰는 건 내 마음의 저금통에 금을 넣는 것과 같아.",
-      "시간을 그냥 낭비하지 말고, 내 꿈을 이루는 데 소중히 사용할 거야.",
-      "오늘 책을 읽는 시간은 내 뇌에 멋진 힘을 키우는 씨앗을 심는 일이야.",
+      "내가 읽는 책은 내 마음이 잘 성장할 수 있도록 씨앗을 심는 일이야.",
       "매일매일 조금씩 노력하는 시간들이 모여 미래의 큰 발걸음이 될 거야.",
       "나 자신을 위해 가치있는 일을 하는 것이 시간을 가장 잘 사용하는 방법이야.",
-      "오늘 시간을 지혜롭게 써서 미래의 나 자신을 친절히 맞이할 거야."
+      "오늘의 시간을 지혜롭게 써서 미래의 나 자신을 친절하게 맞이할 거야.",
+      "오늘 잘 쓴 시간은 내일의 힘이 돼."
     ],
-    wisdom:"매일 조금씩 노를 저으면, 네 배는 결국 아름다운 섬에 도착할 수 있단다.",
-    wisdomAttr:"선원의 격언"
+    wisdomEn:"\"A little bit of rowing every day takes your boat to a beautiful island.\"",
+    wisdomKo:"\"매일 조금씩 노를 저으면, 네 배는 결국 아름다운 섬에 도착할 수 있단다.\"",
+    wisdomAttr:"Sailor\'s Wisdom · 선원의 지혜"
   },
   {
-    id:"4-4", title:"Chapter 4-4. It is Never Too Late to Start",
+    id:"4-4",
+    title:"Chapter 4-4. It is Never Too Late To Start",
     titleKo:"4-4장. 늦었다고 생각할 때가 가장 이른 시기이다",
     en:[
-      "The moment I think it is too late is actually the earliest time to begin.",
-      "Even with little time left, the choice to try again is what truly matters.",
+      "The moment I think it is too late is the earliest time to begin.",
+      "Even with little time left the choice to try again is what truly matters.",
       "That small decision to pick things back up can change everything.",
       "It is never truly too late as long as I choose to begin right now.",
-      "Every new start, even a late one, is still a brave step forward.",
-      "The best time to begin was yesterday — the next best time is right now.",
+      "Every new start even a late one is still a brave step forward.",
+      "The best time to begin was yesterday, the next best time is right now.",
       "I will not let the thought of being late stop me from starting."
     ],
     ko:[
       "늦었다고 생각하는 순간이 가장 이른 때야.",
-      "남은 시간이 부족해도, 다시 시작하기로 한 그 선택이 결국 결과를 바꿔.",
+      "남은 시간이 부족해도, 포기하지 않고 다시 시작하기로 한 그 선택이 결과를 바꿔.",
       "포기하지 않고 다시 도전하기로 한 작은 결정이 나의 결말을 바꿀 수 있어.",
       "지금 당장 시작하기로 마음먹는다면 정말로 늦은 때란 없어.",
       "모든 새로운 시작은, 설령 늦었더라도 그 자체로 용기 있는 발걸음이야.",
       "시작하기 가장 좋은 시간은 어제였어. 그다음으로 좋은 시간은 바로 지금이야.",
       "늦었다는 생각이 나를 멈추게 두지 않을 거야."
     ],
-    wisdom:"항로를 벗어났다는 걸 깨달았을 때가, 돛을 고치기 가장 좋은 순간이다.",
-    wisdomAttr:"선원의 격언"
+    wisdomEn:"\"The best time to adjust your sails is when you notice you are off course.\"",
+    wisdomKo:"\"항로를 벗어났다는 걸 깨달았을 때가, 돛을 고치기 가장 좋은 순간이다.\"",
+    wisdomAttr:"Sailor\'s Wisdom · 선원의 지혜"
   },
   {
-    id:"4-5", title:"Chapter 4-5. Buying Time, Expanding Life",
-    titleKo:"4-5장. 시간을 사는 삶, 시간을 늘리는 삶",
+    id:"4-5",
+    title:"Chapter 4-5. Buying Time for What Truly Matters",
+    titleKo:"4-5장. 진정 소중한 것에 집중하기 위한 시간을 사는 삶",
     en:[
-      "Earning money is not just about buying things — it is about extending my own time.",
-      "I can use money to borrow other people's time and focus on what truly matters.",
-      "Money can be a powerful tool to buy time, or a trap that drains it.",
-      "What I spend my money on ultimately determines the direction of my life.",
-      "Money earned and spent wisely creates the space to nurture my dreams.",
-      "Being wealthy means having the freedom to live more of my time as my true self.",
-      "I choose to use money as a tool that gives me more time for what matters most."
+      "Earning money is not just about buying things but creating more time for what matters.",
+      "Money allows us to borrow other people's time to focus on what is most important.",
+      "When I pay someone to tend the garden I gain time for reading or family.",
+      "Money can become a tool for buying time or a trap that steals it.",
+      "What I spend my money on shapes the direction of my life.",
+      "Earning and spending smartly creates more valuable moments for me.",
+      "Becoming wealthy means having more time to live the life that is truly my own."
     ],
     ko:[
-      "돈을 번다는 것은 단순히 물건을 사는 것이 아니라, 내 시간을 연장하는 일이야.",
-      "나는 돈으로 다른 사람의 시간을 빌려 더 중요한 일에 쓸 수 있어.",
-      "돈은 시간을 사는 도구가 될 수도 있고, 시간을 잃게 만드는 함정이 될 수도 있어.",
-      "무엇을 위해 돈을 쓰는지가 내 삶의 방향을 결정해.",
-      "지혜롭게 벌어서 쓰는 돈은 꿈을 키울 시간을 만들어 줘.",
-      "부자가 된다는 건, 더 많은 시간을 진정 나 자신을 위해 사는 사람이 되는 거야.",
-      "나는 돈을 가장 소중한 것을 위한 시간을 더 많이 주는 도구로 사용할 거야."
+      "돈을 버는 것은 단순히 물건을 사는 것이 아니라, 소중한 것을 위해 더 많은 시간을 만드는 거야.",
+      "우리는 돈으로 다른 사람의 시간을 빌려 더 중요한 일에 쓸 수 있어.",
+      "정원 관리를 맡기면 책 읽거나 가족과 보낼 시간을 얻게 돼.",
+      "돈은 시간을 사는 도구가 될 수도 있고, 잘못 사용하면 시간을 잃게 만드는 함정이 될 수도 있어.",
+      "어떻게 돈을 쓰는지에 따라 삶의 방향을 결정할 수 있어.",
+      "지혜롭게 벌어서 쓰는 돈은 나에게 가치있는 시간을 만들어 줘.",
+      "부자가 된다는 건 진정으로 소중한 일들을 위해 더 많은 시간을 선택할 수 있는 사람이 되는 거야."
     ],
-    wisdom:"숙련된 항해사는 파도를 탓하지 않고, 파도를 이용해 속도를 높인다.",
-    wisdomAttr:"선원의 격언"
+    wisdomEn:"\"The captain who delegates the rigging has more time to read the stars.\"",
+    wisdomKo:"\"사소한 실무를 위임할 줄 아는 선장이 항해 방향을 잘 읽을 수 있는 시간을 확보한다.\"",
+    wisdomAttr:"Sailor\'s Wisdom · 선원의 지혜"
   },
   {
-    id:"4-6", title:"Chapter 4-6. The Power to Change a Day",
+    id:"4-6",
+    title:"Chapter 4-6. The Power to Change a Day",
     titleKo:"4-6장. 하루를 바꾸는 힘",
     en:[
       "The first 30 minutes in the morning and the last 30 minutes at night are magic time.",
-      "In the morning, I tell myself what kind of person I want to become.",
-      "I say: I can do whatever it is.",
-      "Before sleep, I think of one thing I did well today.",
+      "In the morning I tell myself what kind of person I want to become.",
+      "I say to myself: I can do whatever it is.",
+      "Before sleep I think of one thing I did well today.",
       "I give myself a hug and say: I am doing enough. Great job today.",
-      "When I take care of these two windows of time, I begin to control my day.",
-      "When I control my day, I slowly learn to guide my life."
+      "When I care for these two windows of time I begin to control my day.",
+      "When I control my day I slowly learn to guide my life."
     ],
     ko:[
       "아침에 일어난 후의 30분과 잠들기 전의 30분은 하루를 바꾸는 마법의 시간이야.",
@@ -1014,20 +1193,22 @@ const CHAPTERS = [
       "이 두 번의 30분을 소중히 쓰면 하루를 다스릴 수 있어.",
       "하루를 스스로 다스릴 수 있을 때, 조금씩 내 인생을 이끄는 법을 배우게 돼."
     ],
-    wisdom:"아침의 첫 한 시간은 그날 하루를 조종하는 키와 같다.",
-    wisdomAttr:"제임스 호웰"
+    wisdomEn:"\"The first hour of the morning is the rudder of the day.\"",
+    wisdomKo:"\"아침의 첫 한 시간은 그날 하루를 조종하는 키와 같다.\"",
+    wisdomAttr:"James Howell · 제임스 호웰"
   },
   {
-    id:"4-7", title:"Chapter 4-7. The Time of Focus",
+    id:"4-7",
+    title:"Chapter 4-7. The Time of Focus, the Expansion of Time",
     titleKo:"4-7장. 몰입의 시간, 시간의 확장",
     en:[
-      "When I am fully focused, time seems to pause and stay with me.",
-      "In that moment, there is no yesterday and no tomorrow — only now.",
-      "When I draw, read, or lose myself in something I love, I grow bigger than time.",
-      "The clock keeps moving, but my heart feels free.",
-      "As these moments of focus gather, my day becomes longer and my life becomes deeper.",
-      "Focus is not about spending time — it is about expanding it.",
-      "The more often I live like this, the richer my life will become."
+      "When I am fully focused time seems to pause and stay with me.",
+      "In that moment there is no yesterday and no tomorrow, only now.",
+      "When I draw read or lose myself in something I love I grow bigger than time.",
+      "The clock keeps moving but my heart feels free.",
+      "As moments of focus gather my day becomes longer and my life deeper.",
+      "Focus is not about spending time but about expanding it.",
+      "The more often I live like this the richer my life will become."
     ],
     ko:[
       "무언가에 온전히 집중할 때, 시간은 흐르지 않고 잠시 머무는 것처럼 느껴져.",
@@ -1038,66 +1219,72 @@ const CHAPTERS = [
       "몰입은 시간을 쓰는 것이 아니라, 시간을 넓히는 힘이야.",
       "이런 순간들이 많아질수록, 내 인생은 더 풍요로워져."
     ],
-    wisdom:"선원이 바람과 키에 온전히 집중할 때, 시간은 바다 속으로 사라진다.",
-    wisdomAttr:"선원의 격언"
+    wisdomEn:"\"When a sailor fully focuses on the wind and the helm, time disappears into the sea.\"",
+    wisdomKo:"\"선원이 바람과 방향키에 온전히 집중할 때, 시간은 멈춘 것처럼 바다 속으로 사라진다.\"",
+    wisdomAttr:"Sailor\'s Wisdom · 선원의 지혜"
   },
   {
-    id:"4-8", title:"Chapter 4-8. The Time of Gratitude",
+    id:"4-8",
+    title:"Chapter 4-8. The Time of Gratitude, New Way to See the Present",
     titleKo:"4-8장. 감사의 시간, 현재를 새롭게 보는 시선",
     en:[
       "I can find things to be grateful for even in the smallest moments of my day.",
-      "A warm cup of tea, a friend's greeting, and morning sunlight are all gifts.",
-      "When I look at the present with gratitude, my mind is free from worry.",
-      "In those moments, my heart feels free and the scenery of life becomes clearer.",
-      "Gratitude is not about what I have — it is about how I see what I have.",
-      "Living each day with gratitude in my heart is the true way to navigate my life.",
+      "A warm cup of tea a friend's greeting and morning sunlight are all gifts.",
+      "When I look at the present with gratitude my mind is free from worry.",
+      "In those moments my heart feels free and the scenery of life becomes clearer.",
+      "Gratitude is not about what I have but about how I see what I have.",
+      "Living each day with gratitude is the true way to navigate my life.",
       "I choose to see beauty in the ordinary moments all around me."
     ],
     ko:[
-      "하루의 작은 순간에도 감사할 일들을 발견할 수 있어.",
+      "하루의 작은 순간에도 감사할 일들을 찾을 수 있어.",
       "따뜻한 차 한 잔, 친구의 짧은 인사, 아침 햇살도 모두 감사의 대상이야.",
       "감사를 느끼며 현재를 바라보면, 어제의 후회나 내일의 걱정에 마음이 빼앗기지 않아.",
       "그 순간 마음이 자유로워지고, 삶의 풍경이 훨씬 선명하게 보여.",
       "감사는 내가 가진 것이 아니라, 내가 가진 것을 어떻게 바라보느냐에 관한 거야.",
-      "마음속으로 오늘을 감사하며 살아가는 것이 내 삶의 진정한 항해야.",
+      "마음속으로 매일 감사하며 살아가는 것이 내 삶의 진정한 항해야.",
       "내 주변의 평범한 순간들 속에서 아름다움을 발견하기로 선택할 거야."
     ],
-    wisdom:"감사할 줄 아는 선원은 작은 파도 속에서도 평온한 바다를 본다.",
-    wisdomAttr:"선원의 격언"
+    wisdomEn:"\"A sailor who watches only the horizon misses the beauty of the waves beneath.\"",
+    wisdomKo:"\"수평선만 주시하는 선원은 정작 그 아래에 있는 파도의 아름다움을 놓치기 쉽다.\"",
+    wisdomAttr:"Sailor\'s Wisdom · 선원의 지혜"
   },
   {
-    id:"4-9", title:"Chapter 4-9. The Time of Dreams",
+    id:"4-9",
+    title:"Chapter 4-9. The Time of Dreams, the Time With Yourself",
     titleKo:"4-9장. 꿈의 시간, 자신과 함께 있는 시간",
     en:[
       "The time to dream always begins when I spend time with myself.",
-      "When I quietly observe my thoughts and feelings, I discover my true dreams.",
-      "Being alone is not loneliness — it is a precious moment to meet myself.",
+      "When I quietly observe my thoughts and feelings I discover my true dreams.",
+      "Being alone is not loneliness but a precious moment to meet myself.",
       "Many people live busy lives and forget to listen to their own hearts.",
-      "When I live with awareness, I begin to see the direction of my life more clearly.",
-      "Dreams are not far away — they grow when I stay present with myself.",
-      "When I cherish the time I spend with myself, my life will become deeper and brighter."
+      "When I live with awareness I begin to see the direction of my life more clearly.",
+      "Dreams are not far away and they grow when I stay present with myself.",
+      "When I cherish the time I spend with myself my life becomes deeper and brighter."
     ],
     ko:[
       "꿈을 꾸는 시간은 언제나 나 자신과 함께 있는 시간에서 시작돼.",
-      "조용히 마음을 들여다보며 나의 생각과 감정을 느낄 때, 진짜 꿈을 발견하게 돼.",
-      "혼자 있는 시간은 외로운 시간이 아니라, 나를 만나는 소중한 시간이야.",
+      "조용히 마음을 들여다보며 나의 생각과 감정을 느낄 때, 진짜 꿈을 발견할 수 있어.",
+      "혼자 있는 시간은 외로운 시간이 아니라, 자신을 만나는 소중한 시간이야.",
       "많은 사람들은 바쁘게 살아가며 자신의 마음을 바라볼 시간을 잊고 살아.",
       "의식적으로 살아가는 순간, 나는 삶의 방향을 더 또렷하게 볼 수 있어.",
       "꿈은 멀리 있는 것이 아니라, 지금 이 순간 나와 함께 있을 때 자라나.",
       "자신과 함께 있는 시간을 소중히 여길 때, 내 삶은 더 깊고 빛나게 될 거야."
     ],
-    wisdom:"고요한 바다의 소리를 들을 줄 아는 선원은, 운명의 바람을 놓치지 않는다.",
-    wisdomAttr:"선원의 격언"
+    wisdomEn:"\"A sailor who listens to the quiet sea will always hear the wind of destiny.\"",
+    wisdomKo:"\"고요한 바다의 소리를 들을 줄 아는 선원은, 운명의 바람을 놓치지 않는다.\"",
+    wisdomAttr:"Sailor\'s Wisdom · 선원의 지혜"
   },
   {
-    id:"4-10", title:"Chapter 4-10. How You Spend Your Day",
+    id:"4-10",
+    title:"Chapter 4-10. How You Spend Your Day Shapes Your Life",
     titleKo:"4-10장. 하루를 어떻게 보내느냐가 인생을 만든다",
     en:[
-      "Life is not made in one special day, but in the small days that gather together.",
+      "Life is not made in one special day but in the small days that gather together.",
       "How I spend my day eventually becomes my future.",
-      "Setting my priorities matters — choosing what truly matters first.",
-      "When I choose what truly matters first, time begins to flow more efficiently.",
-      "One small choice can change a day, and that day can change a life.",
+      "Setting my priorities matters so much when I choose what truly matters first.",
+      "When I choose what truly matters first time begins to flow more efficiently.",
+      "One small choice can change a day and that day can change a life.",
       "Living meaningfully is far more important than just living busily.",
       "The person who cherishes their today is the one who ultimately creates their own life."
     ],
@@ -1110,20 +1297,22 @@ const CHAPTERS = [
       "바쁘게 사는 것보다 중요한 건 의미 있게 사는 거야.",
       "오늘을 소중히 쓰는 사람이 결국 자신의 삶을 만들어가는 사람이야."
     ],
-    wisdom:"오늘의 작은 키 조정이 1년 뒤 배가 머물 위치를 결정한다.",
-    wisdomAttr:"선원의 격언"
+    wisdomEn:"\"A small adjustment of the rudder today determines where the ship will be in a year.\"",
+    wisdomKo:"\"오늘의 작은 키 조정이 1년 뒤 배가 머물 위치를 결정한다.\"",
+    wisdomAttr:"Sailor\'s Wisdom · 선원의 지혜"
   },
   {
-    id:"5-1", title:"Chapter 5-1. How Well Do You Know Yourself",
-    titleKo:"5-1장. 네 자신을 얼마나 알고 있을까",
+    id:"5-1",
+    title:"Chapter 5-1. How Well Do You Truly Know Yourself?",
+    titleKo:"5-1장. 네 자신을 얼마나 알고 있을까?",
     en:[
-      "We often think we know ourselves, yet there is always more to discover.",
+      "We often think we know ourselves yet there is always more to discover.",
       "True growth begins when I accept the parts I do not yet know.",
-      "Not knowing is not weakness — it takes courage to admit what I do not know.",
+      "Not knowing is not weakness but courage.",
       "Every question I ask makes my world wider.",
       "I do not need to be perfect to grow.",
       "Knowing myself is a lifelong voyage.",
-      "I explore this journey gently, without fear."
+      "I explore this journey gently without fear."
     ],
     ko:[
       "우리는 종종 자신을 잘 안다고 생각하지만 사실은 모르는 부분이 더 많아.",
@@ -1134,68 +1323,74 @@ const CHAPTERS = [
       "스스로를 알아가는 여행은 평생 계속되는 항해야.",
       "그 여행을 두려워하지 말고 차분히 탐험해볼 거야."
     ],
-    wisdom:"바다는 계속해서 탐험하는 자에게만 그 모습을 드러낸다.",
-    wisdomAttr:"선원의 격언"
+    wisdomEn:"\"The sea reveals itself only to those who keep exploring.\"",
+    wisdomKo:"\"바다는 계속 탐험하는 사람에게만 그 모습을 드러낸다.\"",
+    wisdomAttr:"Sailor\'s Wisdom · 선원의 지혜"
   },
   {
-    id:"5-2", title:"Chapter 5-2. The Other You That Watches Your Thoughts",
+    id:"5-2",
+    title:"Chapter 5-2. The Other You That Watches Your Thoughts",
     titleKo:"5-2장. 생각을 바라보는 또 다른 너",
     en:[
       "There is another part of me that can watch my thoughts.",
-      "Thoughts appear in my mind, but they are not the whole of who I am.",
-      "I pause for a moment and quietly observe what comes to my mind.",
-      "When I learn to observe my thoughts, I can choose my actions more wisely.",
+      "Thoughts appear in my mind but they are not the whole of who I am.",
+      "I pause and quietly observe what comes to my mind.",
+      "When I learn to observe my thoughts I can choose my actions more wisely.",
       "Watching my thoughts instead of being carried by them brings true freedom.",
-      "With practice, I can become the master of my thoughts.",
-      "The more I practice this, the more deeply I will understand myself."
+      "With practice I can become the master of my thoughts.",
+      "The more I practice this the more deeply I will understand myself."
     ],
     ko:[
       "내 마음속에는 생각을 바라볼 수 있는 또 하나의 내가 있어.",
       "생각은 계속 떠오르지만, 그 생각이 곧 나의 전부는 아니야.",
       "잠시 멈춰 떠오르는 생각을 조용히 바라보는 연습을 해봐.",
       "생각을 관찰할 수 있을 때 나는 더 현명하게 선택할 수 있어.",
-      "생각에 끌려다니지 않고 생각을 바라보게 될 때 진정한 마음의 자유가 생겨.",
+      "생각에 끌려다니지 않고 바라보게 될 때 진정한 마음의 자유가 생겨.",
       "그렇게 하면 나는 생각의 주인이 될 수 있어.",
       "그 연습을 계속하다 보면 나는 점점 더 깊이 자신을 이해하게 될 거야."
     ],
-    wisdom:"현명한 선원은 키를 돌리기 전에 먼저 바람을 살핀다.",
-    wisdomAttr:"선원의 격언"
+    wisdomEn:"\"A wise sailor watches the wind before turning the helm.\"",
+    wisdomKo:"\"현명한 선원은 키를 돌리기 전에 먼저 바람을 살핀다.\"",
+    wisdomAttr:"Sailor\'s Wisdom · 선원의 지혜"
   },
   {
-    id:"5-3", title:"Chapter 5-3. Separating Yourself from Your Emotions",
+    id:"5-3",
+    title:"Chapter 5-3. Separating Yourself from Your Emotions",
     titleKo:"5-3장. 감정과 나를 분리하기",
     en:[
-      "Joy, sadness, and anger are just feelings — they do not define me.",
-      "When my emotions rise, I pause, breathe, and count to ten.",
+      "Joy sadness and anger are just feelings but they do not define me.",
+      "When strong emotions arise I pause take a deep breath and count to ten.",
       "I observe them as if watching from the outside.",
-      "Slowly, they begin to soften.",
-      "I am not trapped inside my feelings — I am the one who can see them.",
+      "Slowly they begin to soften.",
+      "I am not trapped inside my feelings but the one who can see them.",
       "It makes me feel so much lighter once I keep that in mind.",
-      "My feelings are visitors — I welcome them, and I let them go."
+      "My feelings are visitors that I welcome and then let go."
     ],
     ko:[
       "기쁨도 슬픔도 분노도 모두 감정일 뿐이야. 그 감정이 나를 정의하지 않아.",
-      "감정이 올라올 때 잠시 멈추고 숨을 쉬면서 열까지 세봐.",
-      "그리고 그 감정을 밖에서 바라보듯 지켜봐.",
-      "그러면 감정은 조금씩 잦아들어.",
-      "나는 감정 속에 빠진 존재가 아니라 그것을 지켜보는 존재야.",
-      "그 사실을 기억하면 마음이 훨씬 자유로워져.",
+      "감정이 올라올 때 잠시 멈추고 숨을 깊이 쉬면서 열까지 세어봐.",
+      "그 감정을 바깥에서 바라보듯 지켜봐.",
+      "그러면 감정은 조금씩 잦아들기 시작해.",
+      "나는 감정 안에 갇힌 존재가 아니라 그것을 지켜보는 존재야.",
+      "그 사실을 마음에 새겨두면 마음이 한결 가벼워질 거야.",
       "내 감정들은 손님이야. 나는 그들을 맞이하고, 또 떠나보내."
     ],
-    wisdom:"폭풍은 지나가도 배는 남는다.",
-    wisdomAttr:"선원의 격언"
+    wisdomEn:"\"Storms pass, but the ship remains.\"",
+    wisdomKo:"\"폭풍은 지나가도 배는 남는다.\"",
+    wisdomAttr:"Sailor\'s Wisdom · 선원의 지혜"
   },
   {
-    id:"5-4", title:"Chapter 5-4. Observing Without Judging",
+    id:"5-4",
+    title:"Chapter 5-4. Observing Without Judging",
     titleKo:"5-4장. 비판이 아닌 관찰의 시선",
     en:[
-      "When I make mistakes, I do not need to blame myself harshly.",
+      "When I make mistakes I do not need to blame myself harshly.",
       "Observation teaches more than judgment.",
       "I quietly accept the mistake and ask why I chose that path.",
       "That is where learning begins.",
-      "I try to observe and understand myself with kindness.",
+      "I observe and understand myself with kindness.",
       "Taking time to observe who I am is the first step toward growth.",
-      "In time, I will find myself becoming much stronger."
+      "In time I will find myself becoming much stronger."
     ],
     ko:[
       "실수했을 때 스스로를 심하게 비난하지 않아도 괜찮아.",
@@ -1206,67 +1401,73 @@ const CHAPTERS = [
       "자신을 관찰하는 것이 성장을 위한 첫걸음이야.",
       "시간이 지나면 훨씬 더 강해진 나 자신을 발견하게 될 거야."
     ],
-    wisdom:"바다는 당신이 저지른 모든 잘못을 찾아낸다.",
-    wisdomAttr:"선원의 격언"
+    wisdomEn:"\"The wise sailor observes the current before judging the compass.\"",
+    wisdomKo:"\"지혜로운 선원은 정확한 판단을 위해 나침반을 보기 전에 조류를 먼저 살핀다.\"",
+    wisdomAttr:"Sailor\'s Wisdom · 선원의 지혜"
   },
   {
-    id:"5-5", title:"Chapter 5-5. Your Movie as an Audience",
+    id:"5-5",
+    title:"Chapter 5-5. Your Movie As an Audience",
     titleKo:"5-5장. 관객으로서의 나의 영화",
     en:[
       "Life is like a movie I have created.",
-      "I am one of the actors, but at times, I am also a quiet audience member.",
-      "When I look at it that way, sadness becomes part of the story.",
+      "I am an actor in that film but at times I am also a quiet audience member.",
+      "When I look at it that way sadness simply becomes part of the story.",
       "And failure becomes a foreshadowing of the next scene.",
-      "By watching my own heart through the eyes of an audience member, I understand others more deeply.",
-      "It allows me to focus more on the present scene, rather than on yesterday's regrets.",
+      "By watching my heart through the eyes of an audience I understand others more deeply.",
+      "It allows me to focus more on the present scene than on yesterday's regrets.",
       "I am both the director and the audience of my own beautiful life story."
     ],
     ko:[
       "삶은 내가 만든 한 편의 영화와 같아.",
-      "나는 그 영화의 배우이기도 하지만, 때로는 조용히 바라보는 관객이기도 해.",
+      "나는 그 영화의 배우이기도 하지만, 때로는 조용히 지켜보는 관객이기도 해.",
       "그렇게 바라보면 슬픔은 이야기의 일부가 돼.",
       "그리고 실패는 다음 장면을 준비하는 복선이 돼.",
       "관객의 시선으로 내 마음을 바라볼 때, 사람들과의 관계도 더 깊이 이해할 수 있어.",
       "그래서 어제의 후회나 내일의 걱정보다, 지금 이 장면에 더 집중할 수 있게 돼.",
       "나는 내 아름다운 삶 이야기의 감독이자 관객이야."
     ],
-    wisdom:"바다는 항해하는 법뿐 아니라, 바라보는 법도 가르쳐준다.",
-    wisdomAttr:"항해의 격언"
+    wisdomEn:"\"The sea teaches not only how to sail, but how to observe.\"",
+    wisdomKo:"\"바다는 항해하는 법뿐 아니라, 바라보는 법도 가르쳐준다.\"",
+    wisdomAttr:"Sailor\'s Wisdom · 선원의 지혜"
   },
   {
-    id:"5-6", title:"Chapter 5-6. Seeing Yourself Through Another's Eyes",
+    id:"5-6",
+    title:"Chapter 5-6. Seeing Yourself Through Another's Eyes",
     titleKo:"5-6장. 타인의 시선으로 나 자신을 바라보기",
     en:[
-      "We often believe we know ourselves well, yet there are parts we cannot see.",
-      "Sometimes it is necessary to look at myself through the eyes of others.",
+      "We often believe we know ourselves well yet there are parts we cannot see.",
+      "At times it is necessary to look at myself through the eyes of others.",
       "Another person's view can become a mirror that reflects a new side of me.",
-      "I do not need to accept everything, but I try to learn from what I see.",
+      "I do not need to accept everything but try to learn from what I discover.",
       "Understanding different perspectives will make my heart wider and deeper.",
-      "In doing so, I will gradually grow into a more balanced person.",
+      "In doing so I will gradually grow into a more balanced person.",
       "Seeing myself through others' eyes is a gift of growth."
     ],
     ko:[
       "우리는 스스로를 잘 안다고 생각하지만 보지 못하는 부분이 많아.",
       "때로는 마치 내가 다른 사람인 것처럼 다른 사람의 시선으로 나를 바라보는 것이 필요해.",
       "타인의 눈은 또 하나의 거울이 되어 새로운 모습을 비춰줘.",
-      "모든 것들을 받아들일 필요는 없지만, 자신을 바라보는 모습에서 배울 점을 찾으려고 해봐.",
+      "모든 것들을 받아들일 필요는 없지만, 자신을 발견하는 모습에서 배울 점을 찾아봐.",
       "다른 시선을 이해하려는 마음은 나를 더 넓고 깊게 만들어 줄 거야.",
       "그렇게 나는 점점 더 균형 잡힌 사람이 되어가.",
       "타인의 눈으로 나를 보는 것은 성장의 선물이야."
     ],
-    wisdom:"두 번째 관측자는 첫 번째가 놓친 것을 본다.",
-    wisdomAttr:"항해의 격언"
+    wisdomEn:"\"A second lookout sees what the first may miss.\"",
+    wisdomKo:"\"두 번째 관측자는 첫 번째가 놓친 것을 본다.\"",
+    wisdomAttr:"Sailor\'s Wisdom · 선원의 지혜"
   },
   {
-    id:"5-7", title:"Chapter 5-7. Pause Before You React",
+    id:"5-7",
+    title:"Chapter 5-7. Pause Before You React",
     titleKo:"5-7장. 반응하기 전에 멈추기",
     en:[
-      "There are many moments when I live reacting automatically, without much thought.",
+      "There are many moments when I live reacting automatically without much thought.",
       "Familiar habits and emotions often make choices on my behalf.",
-      "If I pause for a moment, I gain the space to observe those automatic reactions.",
-      "In that instant, the light of awareness begins to illuminate my mind.",
+      "If I pause for a moment I gain the space to observe those automatic reactions.",
+      "In that instant the light of awareness begins to illuminate my mind.",
       "Habits and thoughts that were once invisible slowly start to reveal themselves.",
-      "That is when I become someone who can choose, rather than just react.",
+      "That is when I become someone who can choose rather than just react.",
       "That small pause is the beginning of changing my life."
     ],
     ko:[
@@ -1278,19 +1479,21 @@ const CHAPTERS = [
       "그때 나는 반응이 아니라 선택을 할 수 있는 사람이 돼.",
       "그 작은 멈춤이 내 삶을 바꾸는 시작이야."
     ],
-    wisdom:"항해사가 잘못된 방향으로 가고 있음을 깨달았다면, 별을 보기 위해 잠시 멈추는 그 순간이 온종일 빠르게 항해하는 것보다 훨씬 가치 있다.",
-    wisdomAttr:"선원의 격언"
+    wisdomEn:"\"If a sailor realizes he is going the wrong direction, even a moment\'s pause to check the stars is more valuable than a day of fast sailing.\"",
+    wisdomKo:"\"항해사가 잘못된 방향으로 가고 있음을 깨달았다면, 별을 보기 위해 잠시 멈추는 그 순간이 온종일 빠르게 항해하는 것보다 훨씬 가치 있다.\"",
+    wisdomAttr:"Sailor\'s Wisdom · 선원의 지혜"
   },
   {
-    id:"5-8", title:"Chapter 5-8. Keeping a Learner's Mindset",
+    id:"5-8",
+    title:"Chapter 5-8. Keeping a Learner's Mindset",
     titleKo:"5-8장. 배우는 사람의 태도 유지하기",
     en:[
       "A person who always has a mind to learn continues to grow.",
       "Having the attitude to learn is more important than what I already know.",
-      "When I accept what I do not know, the door to learning truly opens.",
+      "When I accept what I do not know the door to learning truly opens.",
       "Mistakes and failures are both valuable teachers that help me learn.",
-      "Looking back at myself with a learning attitude is the first step toward metacognition.",
-      "With this mindset, I will not lose my way, no matter what happens.",
+      "Looking at myself with a learning attitude is the first step toward metacognition.",
+      "With this mindset I will not lose my way no matter what happens.",
       "I hope to always remain a learner and continue to expand my life."
     ],
     ko:[
@@ -1298,24 +1501,26 @@ const CHAPTERS = [
       "아는 것보다 배우려는 태도가 더 중요해. 그 마음이 나를 앞으로 나아가게 하니까.",
       "모른다는 것을 인정할 때, 비로소 배움의 문이 열려.",
       "실수와 실패도 모두 나를 가르쳐주는 소중한 선생님이야.",
-      "자신을 돌아보고 배우려는 마음이 바로 메타인지의 첫걸음이야.",
-      "그 마음이 있으면 어떤 상황에서도 길을 잃지 않게 돼.",
+      "배우려는 마음으로 자신을 돌아보는 것이 바로 메타인지의 시작이야.",
+      "이런 마음자세를 가지면 어떤 상황에서도 길을 잃지 않게 돼.",
       "언제나 배우는 사람이 되어, 내 삶을 계속 넓혀갈 거야."
     ],
-    wisdom:"가장 뛰어난 선원은 바다로부터 배우는 것을 멈추지 않는다.",
-    wisdomAttr:"선원의 격언"
+    wisdomEn:"\"The best sailors never stop learning from the sea.\"",
+    wisdomKo:"\"가장 뛰어난 선원은 바다로부터 배우는 것을 멈추지 않는다.\"",
+    wisdomAttr:"Sailor\'s Wisdom · 선원의 지혜"
   },
   {
-    id:"5-9", title:"Chapter 5-9. Polishing the Mirror Within",
+    id:"5-9",
+    title:"Chapter 5-9. Polishing the Mirror Within",
     titleKo:"5-9장. 내면의 거울을 닦기",
     en:[
       "My mind is like a mirror that can sometimes become cloudy.",
-      "When thoughts and emotions pile up, it becomes harder to see myself clearly.",
+      "When thoughts and emotions pile up it becomes harder to see myself clearly.",
       "That is why I need to pause and gently clean that mirror.",
       "Quiet breathing and meditation can help clear my mind.",
       "Writing my thoughts in a journal can also bring clarity.",
       "Honest conversations with others can bring light back to my heart.",
-      "The clearer my inner mirror becomes, the more clearly I will see my true self."
+      "The clearer my inner mirror becomes the more clearly I will see my true self."
     ],
     ko:[
       "내 마음은 거울과 같아서 때로는 흐려지기도 해.",
@@ -1326,20 +1531,22 @@ const CHAPTERS = [
       "누군가와 진솔하게 나누는 대화도 마음을 다시 환하게 만들어 줘.",
       "내면의 거울이 맑아질수록, 나는 더 분명하게 진정한 나 자신을 보게 될 거야."
     ],
-    wisdom:"맑은 나침반이 있어야 배는 올바른 방향으로 나아간다.",
-    wisdomAttr:"선원의 격언"
+    wisdomEn:"\"A clear compass leads the ship true.\"",
+    wisdomKo:"\"선명한 나침반이 있어야 배는 올바른 방향으로 나아간다.\"",
+    wisdomAttr:"Sailor\'s Wisdom · 선원의 지혜"
   },
   {
-    id:"5-10", title:"Chapter 5-10. The Path to Understanding Oneself",
+    id:"5-10",
+    title:"Chapter 5-10. The Path to Understanding Oneself",
     titleKo:"5-10장. 스스로를 이해하는 사람이 되는 길",
     en:[
       "The first person I need to understand is myself.",
-      "When I can step back and look at my thoughts and feelings objectively, I know who I truly am.",
-      "As I start to understand myself, the hearts of others also begin to make sense.",
+      "When I can step back and look at my thoughts and feelings objectively I know who I truly am.",
+      "As I start to understand myself the hearts of others also begin to make sense.",
       "Understanding others must always begin with oneself.",
       "The ability to see myself as I am makes my relationships warmer and deeper.",
-      "A person who truly understands others is someone who has first understood themselves.",
-      "As I walk this path gently, I will become stronger, wiser, and wider in heart."
+      "A person who truly understands others has first understood themselves.",
+      "As I walk this path gently I will become stronger wiser and wider in heart."
     ],
     ko:[
       "가장 먼저 이해해야 할 사람은 바로 나 자신이야.",
@@ -1350,131 +1557,166 @@ const CHAPTERS = [
       "타인을 이해하는 사람은 결국 자신을 먼저 이해한 사람이야.",
       "그 길을 천천히 걸어가다 보면, 나는 더 단단하고 더 현명하고 더 넓은 마음을 가진 사람이 될 거야."
     ],
-    wisdom:"자신의 배를 아는 선원은 어떤 바다도 이해할 수 있다.",
-    wisdomAttr:"선원의 격언"
+    wisdomEn:"\"He who knows his own ship can understand every sea.\"",
+    wisdomKo:"\"자신의 배를 아는 선원은 어떤 바다도 이해할 수 있다.\"",
+    wisdomAttr:"Sailor\'s Wisdom · 선원의 지혜"
   }
 ];
 
-// ── State ──────────────────────────────────────────────────────
-let currentLang = 'ko';
-let currentChapterIdx = 0;
+// ── State ────────────────────────────────────────────
+let primaryLang = 'en'; // English first by default
+let currentIdx = 0;
 let completed = {};
 
-// ── Init ──────────────────────────────────────────────────────
+// ── Init ─────────────────────────────────────────────
 function init() {
   const sel = document.getElementById('chapSel');
   CHAPTERS.forEach((ch, i) => {
     const opt = document.createElement('option');
     opt.value = i;
-    opt.textContent = currentLang === 'ko'
-      ? `${ch.titleKo}`
-      : `${ch.title}`;
+    opt.textContent = ch.title;
     sel.appendChild(opt);
   });
-
-  // URL param ?chapter=1-1
   const params = new URLSearchParams(window.location.search);
-  const chapParam = params.get('chapter');
-  if (chapParam) {
-    const idx = CHAPTERS.findIndex(c => c.id === chapParam);
-    if (idx >= 0) {
-      currentChapterIdx = idx;
-      sel.value = idx;
-    }
+  const cp = params.get('chapter');
+  if (cp) {
+    const idx = CHAPTERS.findIndex(c => c.id === cp);
+    if (idx >= 0) { currentIdx = idx; sel.value = idx; }
   }
-  loadChapter(currentChapterIdx);
+  loadChapter(currentIdx);
 }
 
-function setLang(lang) {
-  currentLang = lang;
-  document.getElementById('btnKo').classList.toggle('active', lang === 'ko');
+function setPrimary(lang) {
+  primaryLang = lang;
   document.getElementById('btnEn').classList.toggle('active', lang === 'en');
-  // Update selector labels
-  const sel = document.getElementById('chapSel');
-  Array.from(sel.options).forEach((opt, i) => {
-    opt.textContent = lang === 'ko' ? CHAPTERS[i].titleKo : CHAPTERS[i].title;
-  });
-  loadChapter(currentChapterIdx);
+  document.getElementById('btnKo').classList.toggle('active', lang === 'ko');
+  // Update column labels
+  const leftLabel  = document.getElementById('colLabelLeft');
+  const rightLabel = document.getElementById('colLabelRight');
+  if (lang === 'en') {
+    leftLabel.textContent  = '🇬🇧 English';
+    leftLabel.className    = 'col-label en';
+    rightLabel.textContent = '🇰🇷 한국어';
+    rightLabel.className   = 'col-label ko';
+  } else {
+    leftLabel.textContent  = '🇰🇷 한국어';
+    leftLabel.className    = 'col-label ko';
+    rightLabel.textContent = '🇬🇧 English';
+    rightLabel.className   = 'col-label en';
+  }
+  loadChapter(currentIdx);
 }
 
 function loadChapter(idx) {
-  currentChapterIdx = parseInt(idx);
+  currentIdx = parseInt(idx);
   completed = {};
-  const ch = CHAPTERS[currentChapterIdx];
-  const sentences = currentLang === 'ko' ? ch.ko : ch.en;
+  const ch = CHAPTERS[currentIdx];
+  const leftLang  = primaryLang;
+  const rightLang = primaryLang === 'en' ? 'ko' : 'en';
+  const leftSents  = ch[leftLang];
+  const rightSents = ch[rightLang];
 
   document.getElementById('chapterTitle').textContent =
-    currentLang === 'ko' ? `⚓ ${ch.titleKo}` : `⚓ ${ch.title}`;
+    `⚓ ${ch.title}  ·  ${ch.titleKo}`;
 
-  // Sentences
   const area = document.getElementById('sentenceArea');
   area.innerHTML = '';
-  sentences.forEach((s, i) => {
-    const card = document.createElement('div');
-    card.className = 'sentence-card';
-    card.innerHTML = `
-      <div class="sentence-num">${currentLang==='ko'?'문장':'Sentence'} ${i+1} / 7</div>
-      <div class="sentence-text">${s}</div>
-      <div class="input-row">
-        <input class="sentence-input" type="text" placeholder="${currentLang==='ko'?'여기에 따라 써봐요...':'Type the sentence here...'}" 
-               oninput="checkInput(this,${i},'${escStr(s)}')" autocomplete="off" autocorrect="off" spellcheck="false">
-      </div>
-      <div class="feedback" id="fb${i}"></div>
+
+  for (let i = 0; i < 7; i++) {
+    const row = document.createElement('div');
+    row.className = 'sentence-row';
+
+    // Left card
+    const lCard = document.createElement('div');
+    lCard.className = `sentence-card ${leftLang === 'en' ? 'en-card' : 'ko-card'}`;
+    lCard.innerHTML = `
+      <div class="sentence-num">${leftLang === 'en' ? 'Sentence' : '문장'} ${i+1}</div>
+      <div class="sentence-text">${leftSents[i]}</div>
+      <input class="sentence-input" type="text"
+        placeholder="${leftLang === 'en' ? 'Type here...' : '여기에 써봐요...'}"
+        oninput="checkInput(this,${i},'${escStr(leftSents[i])}','${leftLang}L')"
+        autocomplete="off" autocorrect="off" spellcheck="false">
+      <div class="feedback" id="fb${leftLang}L${i}"></div>
     `;
-    area.appendChild(card);
-  });
+
+    // Right card
+    const rCard = document.createElement('div');
+    rCard.className = `sentence-card ${rightLang === 'en' ? 'en-card' : 'ko-card'}`;
+    rCard.innerHTML = `
+      <div class="sentence-num">${rightLang === 'en' ? 'Sentence' : '문장'} ${i+1}</div>
+      <div class="sentence-text">${rightSents[i]}</div>
+      <input class="sentence-input" type="text"
+        placeholder="${rightLang === 'en' ? 'Type here...' : '여기에 써봐요...'}"
+        oninput="checkInput(this,${i},'${escStr(rightSents[i])}','${rightLang}R')"
+        autocomplete="off" autocorrect="off" spellcheck="false">
+      <div class="feedback" id="fb${rightLang}R${i}"></div>
+    `;
+
+    row.appendChild(lCard);
+    row.appendChild(rCard);
+    area.appendChild(row);
+  }
 
   // Wisdom
   document.getElementById('wisdomBanner').innerHTML = `
     <div class="anchor">⚓</div>
-    <div class="wisdom-text">"${ch.wisdom}"</div>
+    <div class="wisdom-text">${ch.wisdomEn}</div>
+    <div class="wisdom-text" style="margin-top:4px">${ch.wisdomKo}</div>
     <div class="wisdom-attr">— ${ch.wisdomAttr}</div>
   `;
+
+  // Clear thoughts
+  document.getElementById('thoughtsEn').value = '';
+  document.getElementById('thoughtsKo').value = '';
+  document.getElementById('savedMsg').classList.remove('show');
 
   updateProgress();
 }
 
 function escStr(s) {
-  return s.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+  return s.replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/"/g, '&quot;');
 }
 
-function checkInput(el, idx, target) {
+function checkInput(el, idx, target, key) {
   const val = el.value.trim();
-  const norm = s => s.replace(/[.,!?'"…]/g, '').replace(/\s+/g, ' ').toLowerCase();
-  const fb = document.getElementById('fb' + idx);
+  const norm = s => s.replace(/[.,!?\'\"…]/g, '').replace(/\s+/g, ' ').toLowerCase();
+  const fb = document.getElementById('fb' + key + idx);
   if (!val) {
-    el.className = 'sentence-input';
-    fb.textContent = '';
-    fb.className = 'feedback';
-    delete completed[idx];
+    el.className = 'sentence-input'; fb.textContent = ''; fb.className = 'feedback';
+    delete completed[key + idx];
   } else if (norm(val) === norm(target)) {
     el.className = 'sentence-input correct';
-    fb.textContent = currentLang === 'ko' ? '✅ 완벽해요!' : '✅ Perfect!';
-    fb.className = 'feedback correct';
-    completed[idx] = true;
+    fb.textContent = '✅ Perfect!'; fb.className = 'feedback correct';
+    completed[key + idx] = true;
   } else if (target.toLowerCase().startsWith(val.toLowerCase())) {
-    el.className = 'sentence-input';
-    fb.textContent = currentLang === 'ko' ? '✏️ 계속 써봐요...' : '✏️ Keep going...';
-    fb.className = 'feedback';
-    delete completed[idx];
+    el.className = 'sentence-input'; fb.textContent = '✏️ Keep going...'; fb.className = 'feedback';
+    delete completed[key + idx];
   } else {
     el.className = 'sentence-input wrong';
-    fb.textContent = currentLang === 'ko' ? '❌ 다시 확인해봐요' : '❌ Check again';
-    fb.className = 'feedback wrong';
-    delete completed[idx];
+    fb.textContent = '❌ Check again'; fb.className = 'feedback wrong';
+    delete completed[key + idx];
   }
   updateProgress();
 }
 
 function updateProgress() {
-  const total = 7;
+  const total = 14; // 7 EN + 7 KO
   const done = Object.keys(completed).length;
   const pct = Math.round((done / total) * 100);
   document.getElementById('barFill').style.width = pct + '%';
-  document.getElementById('barLabel').textContent =
-    currentLang === 'ko'
-      ? `${done} / ${total} 완료 · ${pct}%`
-      : `${done} / ${total} done · ${pct}%`;
+  document.getElementById('barLabel').textContent = `${done} / ${total} completed · ${pct}%`;
+}
+
+function saveThoughts() {
+  // In-memory save (localStorage not supported in Claude artifacts)
+  const msg = document.getElementById('savedMsg');
+  msg.classList.add('show');
+  setTimeout(() => msg.classList.remove('show'), 2000);
+}
+
+function clearThoughts() {
+  document.getElementById('thoughtsEn').value = '';
+  document.getElementById('thoughtsKo').value = '';
 }
 
 window.addEventListener('DOMContentLoaded', init);
