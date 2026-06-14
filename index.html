@@ -55,6 +55,10 @@
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%232e6da4' stroke-width='2' fill='none'/%3E%3C/svg%3E");
     background-repeat: no-repeat; background-position: right 12px center;
   }
+  .journal-overview {
+    margin-top: 8px; font-size: 0.72rem; color: var(--ocean);
+    font-weight: 600;
+  }
 
   /* ── Language toggle ── */
   #langToggle {
@@ -183,6 +187,10 @@
     opacity: 0; transition: opacity 0.3s; align-self: center;
   }
   .saved-msg.show { opacity: 1; }
+  .last-saved {
+    font-size: 0.68rem; color: #8aabcd; align-self: center;
+    margin-right: auto;
+  }
 
   /* ── Progress bar ── */
   #progressBar {
@@ -213,6 +221,7 @@
 <div id="chapterSelect">
   <label>📖 Chapter Select · 챕터 선택</label>
   <select id="chapSel" onchange="loadChapter(this.value)"></select>
+  <div id="journalOverview" class="journal-overview"></div>
 </div>
 
 <div id="langToggle">
@@ -237,19 +246,22 @@
     <div class="thoughts-col">
       <label>🇬🇧 Write in English</label>
       <textarea class="thoughts-textarea" id="thoughtsEn"
-        placeholder="What did you feel or learn from this chapter?"></textarea>
+        placeholder="What did you feel or learn from this chapter?"
+        oninput="onThoughtsInput()"></textarea>
       <div class="thoughts-hint">Write freely in your own words.</div>
     </div>
     <div class="thoughts-col">
       <label>🇰🇷 한국어로 쓰기</label>
       <textarea class="thoughts-textarea" id="thoughtsKo"
-        placeholder="이 챕터에서 느끼거나 배운 점을 써봐요."></textarea>
+        placeholder="이 챕터에서 느끼거나 배운 점을 써봐요."
+        oninput="onThoughtsInput()"></textarea>
       <div class="thoughts-hint">자유롭게 나만의 언어로 써봐요.</div>
     </div>
   </div>
   <div class="thoughts-actions">
-    <span class="saved-msg" id="savedMsg">✅ Saved!</span>
-    <button class="btn-clear" onclick="clearThoughts()">Clear</button>
+    <span class="saved-msg" id="savedMsg">✅ Saved on this device</span>
+    <span class="last-saved" id="lastSaved"></span>
+    <button class="btn-clear" onclick="clearThoughts()">Clear this chapter</button>
     <button class="btn-save" onclick="saveThoughts()">Save 💾</button>
   </div>
 </div>
@@ -1584,6 +1596,7 @@ function init() {
     if (idx >= 0) { currentIdx = idx; sel.value = idx; }
   }
   loadChapter(currentIdx);
+  updateJournalOverview();
 }
 
 function setPrimary(lang) {
@@ -1665,12 +1678,12 @@ function loadChapter(idx) {
     <div class="wisdom-attr">— ${ch.wisdomAttr}</div>
   `;
 
-  // Clear thoughts
-  document.getElementById('thoughtsEn').value = '';
-  document.getElementById('thoughtsKo').value = '';
+  // Load saved thoughts for this chapter (or empty if none)
+  loadThoughtsForChapter(ch.id);
   document.getElementById('savedMsg').classList.remove('show');
 
   updateProgress();
+  updateJournalOverview();
 }
 
 function escStr(s) {
@@ -1707,16 +1720,100 @@ function updateProgress() {
   document.getElementById('barLabel').textContent = `${done} / ${total} completed · ${pct}%`;
 }
 
-function saveThoughts() {
-  // In-memory save (localStorage not supported in Claude artifacts)
-  const msg = document.getElementById('savedMsg');
-  msg.classList.add('show');
-  setTimeout(() => msg.classList.remove('show'), 2000);
+// ── Reading Journal storage (localStorage) ─────────────
+const STORAGE_PREFIX = 'sailorJournal_';
+let autoSaveTimer = null;
+
+function storageKey(chapterId) {
+  return STORAGE_PREFIX + chapterId;
+}
+
+function loadThoughtsForChapter(chapterId) {
+  const raw = localStorage.getItem(storageKey(chapterId));
+  const enBox = document.getElementById('thoughtsEn');
+  const koBox = document.getElementById('thoughtsKo');
+  if (raw) {
+    try {
+      const data = JSON.parse(raw);
+      enBox.value = data.en || '';
+      koBox.value = data.ko || '';
+      showLastSaved(data.savedAt);
+    } catch (e) {
+      enBox.value = '';
+      koBox.value = '';
+      showLastSaved(null);
+    }
+  } else {
+    enBox.value = '';
+    koBox.value = '';
+    showLastSaved(null);
+  }
+}
+
+function showLastSaved(timestamp) {
+  const el = document.getElementById('lastSaved');
+  if (!timestamp) {
+    el.textContent = '';
+    return;
+  }
+  const d = new Date(timestamp);
+  const dateStr = d.toLocaleDateString();
+  const timeStr = d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  el.textContent = `Last saved: ${dateStr} ${timeStr}`;
+}
+
+function onThoughtsInput() {
+  // Debounced auto-save, 800ms after the user stops typing
+  if (autoSaveTimer) clearTimeout(autoSaveTimer);
+  autoSaveTimer = setTimeout(() => {
+    saveThoughts(true);
+  }, 800);
+}
+
+function saveThoughts(isAuto) {
+  const ch = CHAPTERS[currentIdx];
+  const enVal = document.getElementById('thoughtsEn').value;
+  const koVal = document.getElementById('thoughtsKo').value;
+  const now = Date.now();
+
+  if (!enVal.trim() && !koVal.trim()) {
+    // Nothing to save; remove entry if it exists
+    localStorage.removeItem(storageKey(ch.id));
+    showLastSaved(null);
+    updateJournalOverview();
+    return;
+  }
+
+  const data = { en: enVal, ko: koVal, savedAt: now, title: ch.title, titleKo: ch.titleKo };
+  localStorage.setItem(storageKey(ch.id), JSON.stringify(data));
+  showLastSaved(now);
+  updateJournalOverview();
+
+  if (!isAuto) {
+    const msg = document.getElementById('savedMsg');
+    msg.classList.add('show');
+    setTimeout(() => msg.classList.remove('show'), 2000);
+  }
 }
 
 function clearThoughts() {
+  const ch = CHAPTERS[currentIdx];
   document.getElementById('thoughtsEn').value = '';
   document.getElementById('thoughtsKo').value = '';
+  localStorage.removeItem(storageKey(ch.id));
+  showLastSaved(null);
+  updateJournalOverview();
+}
+
+// ── Journal overview: how many chapters have saved entries ──
+function updateJournalOverview() {
+  const el = document.getElementById('journalOverview');
+  if (!el) return;
+  let count = 0;
+  CHAPTERS.forEach(ch => {
+    if (localStorage.getItem(storageKey(ch.id))) count++;
+  });
+  el.textContent = `📔 ${count} / ${CHAPTERS.length} chapters journaled · 저널 작성: ${count}/${CHAPTERS.length}`;
 }
 
 window.addEventListener('DOMContentLoaded', init);
