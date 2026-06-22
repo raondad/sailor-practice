@@ -172,6 +172,23 @@
   .thoughts-actions {
     display: flex; justify-content: flex-end; gap: 8px; margin-top: 10px;
   }
+  .pdf-actions {
+    display: flex; gap: 8px; margin-top: 8px;
+  }
+  .btn-pdf-chapter {
+    flex: 1; padding: 8px 10px; border-radius: 8px; border: none;
+    font-size: 0.75rem; color: white; cursor: pointer; font-weight: 600;
+    background: linear-gradient(90deg, #2e7d52, #3a9e6b);
+  }
+  .btn-pdf-all {
+    flex: 1; padding: 8px 10px; border-radius: 8px; border: none;
+    font-size: 0.75rem; color: white; cursor: pointer; font-weight: 600;
+    background: linear-gradient(90deg, var(--navy), var(--ocean));
+  }
+  .pdf-msg {
+    font-size: 0.72rem; color: var(--ocean); font-weight: 600;
+    margin-top: 6px; min-height: 18px; text-align: center;
+  }
   .btn-clear {
     padding: 6px 14px; border-radius: 6px; border: 1px solid #c8ddf0;
     font-size: 0.75rem; color: #8aabcd; background: white; cursor: pointer;
@@ -264,6 +281,11 @@
     <button class="btn-clear" onclick="clearThoughts()">Clear this chapter</button>
     <button class="btn-save" onclick="saveThoughts()">Save 💾</button>
   </div>
+  <div class="pdf-actions">
+    <button class="btn-pdf-chapter" onclick="exportCurrentChapterPDF()">📄 This chapter → PDF</button>
+    <button class="btn-pdf-all" onclick="exportAllChaptersPDF()">📚 All journals → PDF</button>
+  </div>
+  <div id="pdfMsg" class="pdf-msg"></div>
 </div>
 
 <div id="progressBar">
@@ -1817,6 +1839,221 @@ function updateJournalOverview() {
 }
 
 window.addEventListener('DOMContentLoaded', init);
+</script>
+
+<!-- jsPDF (PDF 생성 라이브러리) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script>
+// ── PDF Export ────────────────────────────────────────────
+function showPdfMsg(msg, isError) {
+  const el = document.getElementById('pdfMsg');
+  el.textContent = msg;
+  el.style.color = isError ? '#c0392b' : '#2e6da4';
+  setTimeout(() => { el.textContent = ''; }, 4000);
+}
+
+function buildPdfDoc(entries) {
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({ unit: 'mm', format: 'a4' });
+
+  const pageW = 210, pageH = 297;
+  const margin = 18, contentW = pageW - margin * 2;
+  const navy   = [26,  58,  92];
+  const ocean  = [46, 109, 164];
+  const gold   = [201, 168, 76];
+  const gray   = [120, 140, 160];
+
+  function addHeader(doc, isFirst) {
+    if (!isFirst) doc.addPage();
+    // Navy top bar
+    doc.setFillColor(...navy);
+    doc.rect(0, 0, pageW, 18, 'F');
+    doc.setTextColor(255, 255, 255);
+    doc.setFontSize(11);
+    doc.setFont('helvetica', 'bold');
+    doc.text('⚓  To My Little Sailor · Reading Journal', margin, 12);
+  }
+
+  function addFooter(doc, pageNum) {
+    doc.setFontSize(8);
+    doc.setTextColor(...gray);
+    doc.setFont('helvetica', 'normal');
+    doc.text('raondad.github.io/sailor-practice', margin, pageH - 8);
+    doc.text(`${pageNum}`, pageW - margin, pageH - 8, { align: 'right' });
+    // bottom line
+    doc.setDrawColor(...ocean);
+    doc.setLineWidth(0.3);
+    doc.line(margin, pageH - 12, pageW - margin, pageH - 12);
+  }
+
+  function wrapText(doc, text, x, y, maxW, lineH) {
+    const lines = doc.splitTextToSize(text, maxW);
+    lines.forEach((line, i) => {
+      doc.text(line, x, y + i * lineH);
+    });
+    return y + lines.length * lineH;
+  }
+
+  let pageNum = 1;
+
+  entries.forEach((entry, idx) => {
+    addHeader(doc, idx === 0);
+    let y = 26;
+
+    // Chapter title bar
+    doc.setFillColor(...ocean);
+    doc.roundedRect(margin, y, contentW, 10, 2, 2, 'F');
+    doc.setTextColor(255, 255, 255);
+    doc.setFontSize(9);
+    doc.setFont('helvetica', 'bold');
+    doc.text(entry.title, margin + 4, y + 6.8);
+    y += 16;
+
+    // Korean title
+    doc.setTextColor(...navy);
+    doc.setFontSize(8.5);
+    doc.setFont('helvetica', 'italic');
+    doc.text(entry.titleKo, margin, y);
+    y += 8;
+
+    // Saved date
+    if (entry.savedAt) {
+      doc.setFontSize(7.5);
+      doc.setTextColor(...gray);
+      doc.setFont('helvetica', 'normal');
+      const d = new Date(entry.savedAt);
+      doc.text(`Saved: ${d.toLocaleDateString()} ${d.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})}`, margin, y);
+      y += 7;
+    }
+
+    // Divider
+    doc.setDrawColor(...gold);
+    doc.setLineWidth(0.5);
+    doc.line(margin, y, pageW - margin, y);
+    y += 7;
+
+    // Two-column journal entries
+    const colW = (contentW - 6) / 2;
+    const colRight = margin + colW + 6;
+
+    // EN header
+    doc.setFillColor(46, 109, 164, 0.12);
+    doc.setFillColor(230, 240, 250);
+    doc.roundedRect(margin, y, colW, 7, 1, 1, 'F');
+    doc.setTextColor(...ocean);
+    doc.setFontSize(8);
+    doc.setFont('helvetica', 'bold');
+    doc.text('🇬🇧  Write in English', margin + 3, y + 5);
+
+    // KO header
+    doc.setFillColor(235, 240, 252);
+    doc.roundedRect(colRight, y, colW, 7, 1, 1, 'F');
+    doc.setTextColor(...navy);
+    doc.text('🇰🇷  한국어로 쓰기', colRight + 3, y + 5);
+    y += 11;
+
+    // EN content
+    const enText = entry.en || '(No entry)';
+    const koText = entry.ko || '(작성 없음)';
+    const enLines = doc.splitTextToSize(enText, colW - 4);
+    const koLines = doc.splitTextToSize(koText, colW - 4);
+    const maxLines = Math.max(enLines.length, koLines.length);
+    const lineH = 5.5;
+    const boxH = Math.max(maxLines * lineH + 8, 24);
+
+    // EN box
+    doc.setDrawColor(...ocean);
+    doc.setLineWidth(0.3);
+    doc.setFillColor(252, 254, 255);
+    doc.roundedRect(margin, y, colW, boxH, 2, 2, 'FD');
+    doc.setTextColor(40, 40, 60);
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(8.5);
+    enLines.forEach((line, i) => doc.text(line, margin + 3, y + 6 + i * lineH));
+
+    // KO box
+    doc.setDrawColor(...navy);
+    doc.setFillColor(252, 252, 255);
+    doc.roundedRect(colRight, y, colW, boxH, 2, 2, 'FD');
+    doc.setTextColor(40, 40, 60);
+    koLines.forEach((line, i) => doc.text(line, colRight + 3, y + 6 + i * lineH));
+
+    y += boxH + 4;
+
+    // Wisdom footer
+    if (entry.wisdomEn) {
+      doc.setFillColor(26, 58, 92);
+      doc.roundedRect(margin, y, contentW, 14, 2, 2, 'F');
+      doc.setTextColor(255, 215, 100);
+      doc.setFontSize(7);
+      doc.setFont('helvetica', 'italic');
+      const wisdomLines = doc.splitTextToSize(`⚓  ${entry.wisdomEn}`, contentW - 6);
+      wisdomLines.forEach((line, i) => doc.text(line, margin + 4, y + 5 + i * 4));
+      doc.setTextColor(180, 200, 220);
+      doc.text(`— ${entry.wisdomAttr}`, pageW - margin - 2, y + 5 + wisdomLines.length * 4, { align: 'right' });
+    }
+
+    addFooter(doc, pageNum++);
+  });
+
+  return doc;
+}
+
+function getEntries(chaptersToExport) {
+  return chaptersToExport.map(ch => {
+    const raw = localStorage.getItem(STORAGE_PREFIX + ch.id);
+    const data = raw ? JSON.parse(raw) : null;
+    return {
+      id: ch.id,
+      title: ch.title,
+      titleKo: ch.titleKo,
+      wisdomEn: ch.wisdomEn,
+      wisdomAttr: ch.wisdomAttr,
+      en: data ? data.en : '',
+      ko: data ? data.ko : '',
+      savedAt: data ? data.savedAt : null,
+      hasEntry: !!data
+    };
+  });
+}
+
+function exportCurrentChapterPDF() {
+  const ch = CHAPTERS[currentIdx];
+  const entries = getEntries([ch]);
+  if (!entries[0].en.trim() && !entries[0].ko.trim()) {
+    showPdfMsg('⚠️ No journal entry yet for this chapter. Write something first!', true);
+    return;
+  }
+  showPdfMsg('⏳ Generating PDF...');
+  setTimeout(() => {
+    try {
+      const doc = buildPdfDoc(entries);
+      doc.save(`Reading_Journal_${ch.id}.pdf`);
+      showPdfMsg(`✅ ${ch.id} journal saved as PDF!`);
+    } catch(e) {
+      showPdfMsg('❌ Failed to generate PDF. Please try again.', true);
+    }
+  }, 100);
+}
+
+function exportAllChaptersPDF() {
+  const allEntries = getEntries(CHAPTERS).filter(e => e.hasEntry);
+  if (allEntries.length === 0) {
+    showPdfMsg('⚠️ No journal entries saved yet. Write in some chapters first!', true);
+    return;
+  }
+  showPdfMsg(`⏳ Generating PDF for ${allEntries.length} chapters...`);
+  setTimeout(() => {
+    try {
+      const doc = buildPdfDoc(allEntries);
+      const today = new Date().toISOString().slice(0,10);
+      doc.save(`My_Reading_Journal_${today}.pdf`);
+      showPdfMsg(`✅ ${allEntries.length} chapters exported to PDF!`);
+    } catch(e) {
+      showPdfMsg('❌ Failed to generate PDF. Please try again.', true);
+    }
+  }, 100);
+}
 </script>
 </body>
 </html>
